@@ -5,11 +5,14 @@ const MAIN_MENU_SCENE := preload("res://Scenes/Main_Menu.tscn")
 
 var main: Control = null
 
+static func create_instance() -> Node2D:
+	var instance = MAIN_MENU_SCENE.instantiate()
+	instance.set_script(load("res://Scripts/main_menu.gd"))
+	return instance
+
 func _ready() -> void:
 	# Connect button signals if they exist as direct children
-	var main_menu_scene = MAIN_MENU_SCENE.instantiate()
-	add_child(main_menu_scene)
-	var buttons = main_menu_scene.get_node_or_null("Menu_Buttons")
+	var buttons = get_node_or_null("Menu_Buttons")
 	for btn_name in ["StartGame", "LoadGame", "Settings", "Exit"]:
 		var button = buttons.get_node_or_null(btn_name)
 		if button and button.has_signal("pressed"):
@@ -20,8 +23,8 @@ func _ready() -> void:
 				"Exit": button.connect("pressed", Callable(self, "_on_exit_pressed"))
 
 func _on_start_pressed() -> void:
-	if main != null and main.has_method("start_game"):
-		main.start_game()
+	if main != null and main.has_method("main_menu_to_hub"):
+		main.main_menu_to_hub()
 
 func _on_load_pressed() -> void:
 	# Does nothing yet
