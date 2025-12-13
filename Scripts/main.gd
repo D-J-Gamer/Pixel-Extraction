@@ -1,6 +1,3 @@
-
-
-
 extends Control
 
 const MAIN_MENU := preload("res://Scripts/main_menu.gd")
@@ -23,3 +20,21 @@ func main_menu_to_hub() -> void:
 	hub.main = self
 	menu_script.queue_free()
 	menu_script = null	# Optionally, you can set `menu_script` to null to indicate it's no longer active
+
+func encampment_selection_to_encampment(encampment_name: String) -> bool:
+	print("Starting encampment: " + encampment_name)
+	# Create JSON save file named encampment_name.json as Saves\Example.json
+	var save_path = "res://Saves/" + encampment_name + ".json"
+	if FileAccess.file_exists(save_path):
+		return true
+	
+	var file = FileAccess.open(save_path, FileAccess.WRITE)
+	if file:
+		var save_data = {
+			"Characters" : {},
+			"Collection": []
+		}
+		var json_string = JSON.stringify(save_data)
+		file.store_string(json_string)
+		file.close()
+	return false

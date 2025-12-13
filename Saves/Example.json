@@ -1,0 +1,23 @@
+{
+    "Character": [
+        {
+            "Damage": 1.0,
+            "Inventory": [],
+            "Life": 20.0,
+            "Textures": {
+                "Attack": "Characters\\Main Character\\enemies-skeleton1_attack.png",
+                "AttackFramesWDamage": [
+                    7,
+                    20
+                ],
+                "Death": "Characters\\Main Character\\enemies-skeleton1_death.png",
+                "FrameCount": 8,
+                "FrameSpeed": 0.125,
+                "Idle": "Characters\\Main Character\\enemies-skeleton1_idle.png",
+                "MaxDeathFrames": 17,
+                "Movement": "Characters\\Main Character\\enemies-skeleton1_movement.png"
+            }
+        }
+    ],
+    "Collection": []
+}
