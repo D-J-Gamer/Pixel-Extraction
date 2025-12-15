@@ -1,23 +1,24 @@
 extends Control
 
 const MAIN_MENU := preload("res://Scripts/main_menu.gd")
-const HUB := preload("res://Scripts/encampment_selection.gd")
+const CREATE_HUB_NAME := preload("res://Scripts/encampment_selection.gd")
+const HUB := preload("res://Scripts/encampment/encampment.gd")
+
 
 var menu_script: Node = null
+var create_hub_name: Node = null
+var encampment: Node = null
 
 func _ready() -> void:
 	menu_script = MAIN_MENU.create_instance()
 	add_child(menu_script)
 	menu_script.main = self
 
-	# Ensure processing is enabled so `_process` will be called every frame
-	# set_process(true)
-
 func main_menu_to_hub() -> void:
 	print("Main: Starting game...")
-	var hub = HUB.create_instance()
-	add_child(hub)
-	hub.main = self
+	create_hub_name = CREATE_HUB_NAME.create_instance()
+	add_child(create_hub_name)
+	create_hub_name.main = self
 	menu_script.queue_free()
 	menu_script = null	# Optionally, you can set `menu_script` to null to indicate it's no longer active
 
@@ -37,4 +38,15 @@ func encampment_selection_to_encampment(encampment_name: String) -> bool:
 		var json_string = JSON.stringify(save_data)
 		file.store_string(json_string)
 		file.close()
+	
+	encampment = HUB.create_instance()
+	add_child(encampment)
+	encampment.main = self
+
+	create_hub_name.queue_free()
+	create_hub_name = null
+
 	return false
+
+func encampment_to_game() -> void:
+	print("Encampment to game... ", "Difficulty: ",encampment.get_difficulty(), " Map path: ", encampment.get_map_path())

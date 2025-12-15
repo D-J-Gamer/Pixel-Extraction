@@ -1,13 +1,13 @@
 extends Node2D
 
-const HUB_SCENE := preload("res://Scenes/encampment_selection.tscn")
+const HUB_NAMING_SCENE := preload("res://Scenes/encampment_selection.tscn")
 
 var main: Control = null
 var encampment_name: LineEdit = null
 var save_reminder: Label = null
 
 static func create_instance() -> Node2D:
-	var instance = HUB_SCENE.instantiate()
+	var instance = HUB_NAMING_SCENE.instantiate()
 	instance.set_script(load("res://Scripts/encampment_selection.gd"))
 	return instance
 
@@ -20,9 +20,6 @@ func _ready() -> void:
 func _on_encampment_name_submitted(new_text: String) -> void:
 	print("Encampment name entered: ", new_text)
 	if main.encampment_selection_to_encampment(new_text):
-		# make it so I can continue editing the encampment name line editor
-		# encampment_name.grab_focus()
-		# encampment_name.editable = true
 		save_reminder = get_node("SaveExistsReminder")
 		save_reminder.label_settings.font_color[3] = 1.0
 		set_process(true)

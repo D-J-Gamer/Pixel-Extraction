@@ -1,0 +1,88 @@
+[gd_scene load_steps=15 format=3 uid="uid://d345gele06jhr"]
+
+[ext_resource type="Texture2D" uid="uid://e7p0pqwldcch" path="res://Images/Hub/Difficulty_and_Map_Select.png" id="1_g45p0"]
+[ext_resource type="Texture2D" uid="uid://ny01kqvng5ci" path="res://Images/Hub/AICampSite.png" id="2_w8vpr"]
+[ext_resource type="Texture2D" uid="uid://bop4ommt6tyn4" path="res://Images/Hub/Easy.png" id="3_bkd7o"]
+[ext_resource type="Texture2D" uid="uid://cp5rdd33u2eb6" path="res://Images/Hub/Normal.png" id="4_hl2k4"]
+[ext_resource type="Texture2D" uid="uid://ccmk1ixydrsfe" path="res://Images/Hub/Hard.png" id="5_l8snl"]
+[ext_resource type="Texture2D" uid="uid://bgmptqx4t146j" path="res://Images/Hub/Insane.png" id="6_84oi3"]
+[ext_resource type="Texture2D" uid="uid://b28qseybxwiv8" path="res://Images/Hub/Legendary.png" id="7_dwyl0"]
+[ext_resource type="Script" uid="uid://cwyhp7skdtc7x" path="res://Scripts/encampment/difficulty_selection.gd" id="8_hl2k4"]
+[ext_resource type="Texture2D" uid="uid://chx58c8jpd8it" path="res://Images/Hub/DungeonMapIconTemp.PNG" id="9_l8snl"]
+[ext_resource type="Script" uid="uid://dur4dmmxrn5xp" path="res://Scripts/encampment/select_map.gd" id="10_84oi3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w8vpr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4kngx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mvl7y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tuhwt"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 3816.0
+offset_bottom = 1891.0
+color = Color(0, 0, 0, 1)
+
+[node name="DifficultyAndMapSelect" type="Sprite2D" parent="."]
+position = Vector2(3615, 1747)
+texture = ExtResource("1_g45p0")
+
+[node name="StartGame" type="Button" parent="."]
+offset_left = 3505.0
+offset_top = 1637.0
+offset_right = 3723.0
+offset_bottom = 1692.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9499975, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w8vpr")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_4kngx")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_mvl7y")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tuhwt")
+text = "Start Game"
+
+[node name="AiCampSite" type="Sprite2D" parent="."]
+position = Vector2(2159, 732.99994)
+scale = Vector2(3.123472, 2.864303)
+texture = ExtResource("2_w8vpr")
+
+[node name="DifficultySelect" type="MenuButton" parent="."]
+offset_left = 3632.0
+offset_top = 1708.0
+offset_right = 3779.0
+offset_bottom = 1855.0
+icon = ExtResource("3_bkd7o")
+item_count = 5
+popup/item_0/text = "Easy"
+popup/item_0/icon = ExtResource("3_bkd7o")
+popup/item_0/id = 0
+popup/item_1/text = "Hard"
+popup/item_1/icon = ExtResource("4_hl2k4")
+popup/item_1/id = 1
+popup/item_2/text = "Hard"
+popup/item_2/icon = ExtResource("5_l8snl")
+popup/item_2/id = 2
+popup/item_3/text = "Insane"
+popup/item_3/icon = ExtResource("6_84oi3")
+popup/item_3/id = 3
+popup/item_4/text = "Legendary"
+popup/item_4/icon = ExtResource("7_dwyl0")
+popup/item_4/id = 4
+script = ExtResource("8_hl2k4")
+
+[node name="MapSelect" type="MenuButton" parent="."]
+offset_left = 3449.0
+offset_top = 1706.0
+offset_right = 3596.0
+offset_bottom = 1853.0
+theme_override_constants/icon_max_width = 139
+icon = ExtResource("9_l8snl")
+expand_icon = true
+item_count = 1
+popup/item_0/text = "Dungeon"
+popup/item_0/icon = ExtResource("9_l8snl")
+popup/item_0/id = 0
+script = ExtResource("10_84oi3")
