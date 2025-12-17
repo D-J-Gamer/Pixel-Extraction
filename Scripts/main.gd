@@ -1,5 +1,16 @@
 extends Control
 
+# To do list:
+# 1. Character Create skeleton (excluding the ui that will be included and stats, just adding to a Players list with player image)
+# 1 done 
+# 2. game.gd skeleton as well as transition to game (basically to the point I can move a character around) 
+# 3. Stats 
+# 4. Enemies which have stats 
+# 5. Inventory system as well as a temporary create item in inventory (so I can move it around) 
+# 6. Fighting (ability to kill enemies) 
+# 7. Way to interact with enemies' inventory 
+# 8. Actual player creation ui and way to customize character
+
 const MAIN_MENU := preload("res://Scripts/main_menu.gd")
 const CREATE_HUB_NAME := preload("res://Scripts/encampment_selection.gd")
 const HUB := preload("res://Scripts/encampment/encampment.gd")

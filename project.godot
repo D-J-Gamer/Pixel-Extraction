@@ -15,6 +15,10 @@ run/main_scene="uid://cms6ua6cueygr"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Structures="*res://Scripts/structures.gd"
+
 [rendering]
 
 renderer/rendering_method="mobile"
