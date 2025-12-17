@@ -17,9 +17,9 @@ func _ready():
 	var start_game = get_node_or_null("StartGame")
 	if start_game and start_game.has_signal("pressed"):
 		start_game.connect("pressed", Callable(self, "_on_start_pressed"))
-	var create_player_button = get_node_or_null("CreateCharacter")
-	if create_player_button and create_player_button.has_signal("pressed"):
-		create_player_button.connect("pressed", Callable(self, "create_player_button"))
+	var create_player_button1 = get_node_or_null("CreateCharacter")
+	if create_player_button1 and create_player_button1.has_signal("pressed"):
+		create_player_button1.connect("pressed", Callable(self, "create_player_button"))
 
 func _on_start_pressed():
 	if main == null:
@@ -40,9 +40,15 @@ func create_player_button():
 	# Add player creation UI
 
 	# temp code
+	player.texturePath = "res://Scenes/Characters/skeleton_idle.tscn"
 	create_player(player)
 
 func create_player(player):
 	print("Player created: ", player)
 	players.append(player)
 	current_player_ind = len(players) - 1
+
+func get_player() -> Player:
+	if current_player_ind == null or current_player_ind < 0 or current_player_ind >= len(players):
+		return null
+	return players[current_player_ind]
