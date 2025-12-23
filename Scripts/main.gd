@@ -5,7 +5,8 @@ extends Control
 # 1 done 
 # 2. game.gd skeleton as well as transition to game (basically to the point I can move a character around) 
 # 2 done
-# 3. Stats # partly done
+# 3. Stats 
+# done
 # 4. Enemies which have stats 
 # 5. Inventory system as well as a temporary create item in inventory (so I can move it around) 
 # 6. Fighting (ability to kill enemies) 

@@ -1,5 +1,3 @@
-extends Node2D
-
 const MAP_DATA: Dictionary = {
     "res://Maps/Dungeon.png": {
         "name": "Dungeon",
@@ -66,7 +64,7 @@ const MAP_DATA: Dictionary = {
                 {"width": 1, "height": 126}
             ],
             "locations": [
-                {"x": 1, "y": 1, "Rec": 46},
+            {"x": 1, "y": 1, "Rec": 46},
             {"x": 1, "y": 2, "Rec": 6},
             {"x": 2, "y": 8, "Rec": 36},
             {"x": 2, "y": 19, "Rec": 30},
