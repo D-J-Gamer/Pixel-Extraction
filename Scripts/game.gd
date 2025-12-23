@@ -8,6 +8,7 @@ const VECTOR2_MAP_SCALE = Vector2(MAP_SCALE, MAP_SCALE)
 
 var main: Control = null
 var camera: Camera2D = null
+var player_node: CharacterBody2D = null
 
 static func create_instance():
 	var instance = GAME_SCENE.instantiate()
@@ -30,11 +31,12 @@ func make_map(map_path: String):
 	add_child(map_sprite)
 
 func set_player(player: Structures.Player):
-	var player_node = PLAYER_SCRIPT.new()
+	player_node = load(player.scenePath).instantiate() as CharacterBody2D
+	# var player_node = PLAYER_SCRIPT.new()
 	player_node.set_player(player)
 	add_child(player_node)
 	player_node.position = Vector2(180, 120)
-	center_camera_on(player_node)
+	# center_camera_on(player_node)
 
 func center_camera_on(target: Node2D) -> void:
 	if target == null:

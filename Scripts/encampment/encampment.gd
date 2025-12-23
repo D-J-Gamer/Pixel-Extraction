@@ -40,7 +40,7 @@ func create_player_button():
 	# Add player creation UI
 
 	# temp code
-	player.texturePath = "res://Scenes/Characters/skeleton_idle.tscn"
+	player.scenePath = "res://Scenes/Characters/skeleton.tscn"
 	create_player(player)
 
 func create_player(player):

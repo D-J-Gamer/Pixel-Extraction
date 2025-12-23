@@ -1,5 +1,5 @@
 class Player:
-    var texturePath = ""
+    var scenePath = ""
     var stats = {}
     var inventory = []
     var equippedItems = {}
