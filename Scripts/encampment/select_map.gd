@@ -1,9 +1,9 @@
 extends MenuButton
 
-const MAP_PATHS: Dictionary = {
-    0: "res://Maps/Dungeon.png"
-    # 1: "res://Maps/Dungeon2.png"
-}
+const MAP_PATHS: Array = [
+    "res://Maps/Dungeon.png"
+    #"res://Maps/Dungeon2.png"
+]
 var map_path: String = MAP_PATHS[0]
 
 

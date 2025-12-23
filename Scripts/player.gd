@@ -39,26 +39,32 @@ func _process(delta: float):
 		movement *= 2
 	if Input.is_key_pressed(KEY_W):
 		# code for moving the player up
-		position.y -= movement * delta * SECONDS_COUNT
 		movement_change.y -= movement * delta * SECONDS_COUNT
-		# move_and_slide()
 	if Input.is_key_pressed(KEY_S):
 		# code for moving the player down
-		position.y += movement * delta * SECONDS_COUNT
 		movement_change.y += movement * delta * SECONDS_COUNT
 	if Input.is_key_pressed(KEY_A):
 		# code for moving the player left
-		position.x -= movement * delta * SECONDS_COUNT
 		movement_change.x -= movement * delta * SECONDS_COUNT
 	if Input.is_key_pressed(KEY_D):
 		# code for moving the player right
-		position.x += movement * delta * SECONDS_COUNT
 		movement_change.x += movement * delta * SECONDS_COUNT
-	if movement_change.x != 0 or movement_change.y != 0:
+	
+	# Use move_and_collide to handle collision detection
+	if movement_change != Vector2.ZERO:
+		movement_change = movement_change.normalized() * movement * delta * SECONDS_COUNT
+		var collision = move_and_collide(movement_change) as KinematicCollision2D
+		if collision:
+			if movement_change.x != 0:
+				move_and_collide(Vector2(collision.get_remainder().x, 0))
+			if movement_change.y != 0:
+				move_and_collide(Vector2(0, collision.get_remainder().y))
 		if Input.is_key_pressed(KEY_SHIFT) and animation_player.current_animation != "Run":
 			animation_player.play("Run")
 		elif not Input.is_key_pressed(KEY_SHIFT) and animation_player.current_animation != "Walk":
 			animation_player.play("Walk")
+	
+	if movement_change.x != 0 or movement_change.y != 0:
 		if sprite_texture and movement_change.x > 0:
 			sprite_texture.flip_h = false
 		elif sprite_texture and movement_change.x < 0:
