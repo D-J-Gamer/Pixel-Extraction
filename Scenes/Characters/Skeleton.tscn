@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://cuu1ahjolcojg"]
+[gd_scene load_steps=65 format=3 uid="uid://cuu1ahjolcojg"]
 
 [ext_resource type="Texture2D" uid="uid://dtag2ywndi30q" path="res://Images/Characters/Main Character/enemies-skeleton1_idle.png" id="1_m6wjx"]
 [ext_resource type="Texture2D" uid="uid://b5t0v82ueepu4" path="res://Images/Characters/Main Character/enemies-skeleton1_attack.png" id="1_x51gi"]
@@ -614,6 +614,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xobn0"]
+radius = 4.5
+height = 15.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x51gi"]
 size = Vector2(15, 5)
 
@@ -631,8 +635,17 @@ libraries = {
 sprite_frames = SubResource("SpriteFrames_jrho0")
 animation = &"Attack"
 
+[node name="Area2D" type="Area2D" parent="."]
+z_index = 2
+z_as_relative = false
+position = Vector2(-2.75, 5.5)
+
+[node name="Hit Box" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_xobn0")
+
 [node name="Walking Collision" type="CollisionShape2D" parent="."]
 position = Vector2(-2.5, 11)
 shape = SubResource("RectangleShape2D_x51gi")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)

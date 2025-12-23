@@ -4,6 +4,8 @@ extends CharacterBody2D
 # var sprite: Node2D = null
 var animation_player: AnimationPlayer = null
 var sprite_texture: AnimatedSprite2D = null
+var walking_colision: CollisionShape2D = null
+var hit_box : CollisionShape2D = null
 var delta_time: float = 0.0
 const SECONDS_COUNT: int = 60
 # var speed: float = 2.5
@@ -20,6 +22,7 @@ var charisma = 0
 
 var health: int = 0
 var mana: int = 0
+var mana_regen: float = 0.0
 var stamina: int = 40
 var defense: int = 0
 var damage: int = 0
@@ -44,19 +47,23 @@ func _ready() -> void:
 	animation_player = get_node_or_null("Animations") as AnimationPlayer
 	animation_player.play("Idle")
 	sprite_texture = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	walking_colision = get_node_or_null("Walking Collision") as CollisionShape2D
+	var hit_box_node = get_node_or_null("Area2D")
+	hit_box = hit_box_node.get_node_or_null("Hit Box") as CollisionShape2D
 
 func set_player(player: Structures.Player):
-	level = player.level
-	exp = player.exp
-	constitution = player.constitution
-	strength = player.strength
-	dexterity = player.dexterity
-	intelligence = player.intelligence
-	wisdom = player.wisdom
-	charisma = player.charisma
+	level = player.stats["Level"]
+	exp = player.stats["Exp"]
+	constitution = player.stats["Constitution"]
+	strength = player.stats["Strength"]
+	dexterity = player.stats["Dexterity"]
+	intelligence = player.stats["Intelligence"]
+	wisdom = player.stats["Wisdom"]
+	charisma = player.stats["Charisma"]
 
 	health = constitution * 10 + constitution * 5 * level
 	mana = intelligence * 10 + intelligence * 5 * level
+	mana_regen = intelligence * 0.1 + intelligence * 0.05 * level
 	stamina = 40 + constitution * level
 	defense = int(dexterity * 0.5 * level + constitution * 0.2 * level)
 	damage = strength * 1.5 + strength * 0.5 * level
@@ -111,13 +118,29 @@ func _process(delta: float):
 			animation_player.play("Walk")
 	
 	if movement_change.x != 0 or movement_change.y != 0:
-		if sprite_texture and movement_change.x > 0:
+		if sprite_texture and movement_change.x > 0 and sprite_texture.flip_h:
 			sprite_texture.flip_h = false
-		elif sprite_texture and movement_change.x < 0:
+			walking_colision.position.x *= -1
+			hit_box.position.x *= -1
+		elif sprite_texture and movement_change.x < 0 and not sprite_texture.flip_h:
 			sprite_texture.flip_h = true
+			walking_colision.position.x *= -1
+			hit_box.position.x *= -1
 	else:
 		if animation_player.current_animation != "Idle":
 			animation_player.play("Idle")
+	
+	# Camera zoom control
+	if Input.is_key_pressed(KEY_UP):
+		var camera = get_node_or_null("Camera2D") as Camera2D
+		var zoom_scalescale = camera.zoom.x * 0.02
+		if camera and camera.zoom.x < 5.5:
+			camera.zoom += Vector2(zoom_scalescale, zoom_scalescale)
+	if Input.is_key_pressed(KEY_DOWN):
+		var camera = get_node_or_null("Camera2D") as Camera2D
+		var zoom_scale = camera.zoom.x * 0.02
+		if camera and camera.zoom.x > 2.0:
+			camera.zoom -= Vector2(zoom_scale, zoom_scale)
 
 func set_item_modifiers():
 	pass

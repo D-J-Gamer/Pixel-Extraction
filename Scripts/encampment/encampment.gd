@@ -37,6 +37,8 @@ func get_map_path() -> String:
 
 func create_player_button():	
 	var player = Player.new()
+	player.name = "NewHero"
+	player.stats = Structures.default_beginner_warrior_stats
 	# Add player creation UI
 
 	# temp code
