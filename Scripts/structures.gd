@@ -79,6 +79,13 @@ const default_beginner_cleric_stats = {
     "Charisma": 6
 }
 
+enum BEGINNER_CLASS {
+    WARRIOR,
+    MAGE,
+    ROGUE,
+    CLERIC
+}
+
 const BEGINNER_CLASSES = {
     "Warrior": default_beginner_warrior_stats,
     "Mage": default_beginner_mage_stats,
