@@ -124,16 +124,22 @@ func _ready() -> void:
 func set_player(player: Structures.Player):
 	level = player.stats["Level"]
 	exp = player.stats["Exp"]
-	# for stat_name in base_stats.keys():
-	# 	base_stats[stat_name] = player.stats[stat_name]
+	for stat_name in base_stats.keys():
+		base_stats[stat_name] = player.stats[stat_name]
 	# constitution = player.stats["Constitution"]
 	# strength = player.stats["Strength"]
 	# dexterity = player.stats["Dexterity"]
 	# intelligence = player.stats["Intelligence"]
 	# wisdom = player.stats["Wisdom"]
 	# charisma = player.stats["Charisma"]
-	for stat in Stats:
-		dirtied_stats.append(stat)
+	for stat in Stats.values():
+		dirtify_stat(stat)
+		# dirtied_stats.append(stat)
+		# print("Marking stat dirty: ", stat)
+		# if stat in dirtied_stats:
+		# 	print("Stat ", stat, " is dirty.")
+	for stat in DEPENDENCIES:
+		check_if_dirty(stat)
 	# health = constitution * 10 + constitution * 5 * level
 	# current_health = health
 	# mana = intelligence * 10 + intelligence * 5 * level
@@ -162,6 +168,8 @@ func set_player(player: Structures.Player):
 
 
 func _process(delta: float):
+	check_if_dirty(Stats.Speed)
+	# print("Current Speed: ", speed)
 	var movement = speed
 	var movement_change = Vector2.ZERO
 	if Input.is_key_pressed(KEY_SHIFT):
@@ -231,6 +239,7 @@ func remove_item_buff(item):
 func dirtify_stat(stat_name: Stats):
 	if stat_name not in dirtied_stats:
 		dirtied_stats.append(stat_name)
+		# print("Stat ", stat_name, " marked dirty. Type: ", typeof(stat_name))
 
 func modify_stat(stat_name: Stats, constant: int, multiplier: float):
 	if modified_stats.has(stat_name):
@@ -247,7 +256,10 @@ func modify_stat(stat_name: Stats, constant: int, multiplier: float):
 
 func check_if_dirty(stat_name: Stats):
 	if stat_name not in dirtied_stats:
+		# for i in dirtied_stats:
+			# print("Dirty stat: ", i, " Type: ", typeof(i), " Looking for: ", stat_name, " Type: ", typeof(stat_name))
 		return
+	# print("Recalculating stat: ", stat_name)
 	# Recalculate the stat here
 	match stat_name:
 		Stats.Constitution:
@@ -447,6 +459,7 @@ func recalc_weight_ignore():
 	dirtied_stats.erase(Stats.Weight_Ignore)
 
 func recalc_speed():
+	# print("Recalculating speed...")
 	for stat in DEPENDENCIES[Stats.Speed]:
 		check_if_dirty(stat)
 	speed = base_speed

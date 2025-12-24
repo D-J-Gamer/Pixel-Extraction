@@ -70,6 +70,7 @@ func encampment_to_game() -> void:
 	add_child(game)
 	game.make_map(encampment.get_map_path())
 	game.set_player(encampment.get_player())
+	game.place_enemies(encampment.get_difficulty())
 	# Will add difficulty later
 	game.main = self
 	encampment.queue_free()
