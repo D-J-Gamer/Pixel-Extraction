@@ -1,13 +1,27 @@
 extends CharacterBody2D
 
+class_name PlayerCharacter
+
 # var texturePath: String = ""
 # var sprite: Node2D = null
 var animation_player: AnimationPlayer = null
 var sprite_texture: AnimatedSprite2D = null
 var walking_colision: CollisionShape2D = null
 var hit_box : CollisionShape2D = null
+var attack_area: Area2D = null
 var delta_time: float = 0.0
 const SECONDS_COUNT: int = 60
+
+enum state {
+	IDLE,
+	WALK,
+	RUN,
+	ATTACK,
+	DEATH
+}
+
+var current_state: state = state.IDLE
+
 # var speed: float = 2.5
 # var stats: Dictionary = {}
 #Stats:
@@ -120,6 +134,10 @@ func _ready() -> void:
 	walking_colision = get_node_or_null("Walking Collision") as CollisionShape2D
 	var hit_box_node = get_node_or_null("Area2D")
 	hit_box = hit_box_node.get_node_or_null("Hit Box") as CollisionShape2D
+	attack_area = get_node_or_null("AttackBoxes") as Area2D
+	# attack_area = %AttackBoxes as Area2D
+	print("Attack Area: ", attack_area)
+	attack_area.character_owner = "Player"
 
 func set_player(player: Structures.Player):
 	level = player.stats["Level"]
@@ -170,50 +188,64 @@ func set_player(player: Structures.Player):
 func _process(delta: float):
 	check_if_dirty(Stats.Speed)
 	# print("Current Speed: ", speed)
-	var movement = speed
-	var movement_change = Vector2.ZERO
-	if Input.is_key_pressed(KEY_SHIFT):
-		movement *= 2
-	if Input.is_key_pressed(KEY_W):
-		# code for moving the player up
-		movement_change.y -= 1
-	if Input.is_key_pressed(KEY_S):
-		# code for moving the player down
-		movement_change.y += 1
-	if Input.is_key_pressed(KEY_A):
-		# code for moving the player left
-		movement_change.x -= 1
-	if Input.is_key_pressed(KEY_D):
-		# code for moving the player right
-		movement_change.x += 1
-	
-	# Use move_and_collide to handle collision detection
-	if movement_change != Vector2.ZERO:
-		movement_change = movement_change.normalized() * movement * delta * SECONDS_COUNT
-		var collision = move_and_collide(movement_change) as KinematicCollision2D
-		if collision:
-			if movement_change.x != 0:
-				move_and_collide(Vector2(collision.get_remainder().x, 0))
-			if movement_change.y != 0:
-				move_and_collide(Vector2(0, collision.get_remainder().y))
-		if Input.is_key_pressed(KEY_SHIFT) and animation_player.current_animation != "Run":
-			animation_player.play("Run")
-		elif not Input.is_key_pressed(KEY_SHIFT) and animation_player.current_animation != "Walk":
-			animation_player.play("Walk")
-	
-	if movement_change.x != 0 or movement_change.y != 0:
-		if sprite_texture and movement_change.x > 0 and sprite_texture.flip_h:
-			sprite_texture.flip_h = false
-			walking_colision.position.x *= -1
-			hit_box.position.x *= -1
-		elif sprite_texture and movement_change.x < 0 and not sprite_texture.flip_h:
-			sprite_texture.flip_h = true
-			walking_colision.position.x *= -1
-			hit_box.position.x *= -1
-	else:
-		if animation_player.current_animation != "Idle":
+	if current_state == state.DEATH:
+		return
+	if current_state == state.ATTACK:
+		if not animation_player.is_playing():
+			current_state = state.IDLE
 			animation_player.play("Idle")
-	
+		return
+	if current_state == state.IDLE or current_state == state.WALK or current_state == state.RUN:
+		var movement = speed
+		var movement_change = Vector2.ZERO
+		if Input.is_key_pressed(KEY_SHIFT):
+			movement *= 2
+		if Input.is_key_pressed(KEY_W):
+			# code for moving the player up
+			movement_change.y -= 1
+		if Input.is_key_pressed(KEY_S):
+			# code for moving the player down
+			movement_change.y += 1
+		if Input.is_key_pressed(KEY_A):
+			# code for moving the player left
+			movement_change.x -= 1
+		if Input.is_key_pressed(KEY_D):
+			# code for moving the player right
+			movement_change.x += 1
+		
+		# Use move_and_collide to handle collision detection
+		if movement_change != Vector2.ZERO:
+			movement_change = movement_change.normalized() * movement * delta * SECONDS_COUNT
+			var collision = move_and_collide(movement_change) as KinematicCollision2D
+			if collision:
+				if movement_change.x != 0:
+					move_and_collide(Vector2(collision.get_remainder().x, 0))
+				if movement_change.y != 0:
+					move_and_collide(Vector2(0, collision.get_remainder().y))
+			if Input.is_key_pressed(KEY_SHIFT) and animation_player.current_animation != "Run":
+				animation_player.play("Run")
+				current_state = state.RUN
+			elif not Input.is_key_pressed(KEY_SHIFT) and animation_player.current_animation != "Walk":
+				animation_player.play("Walk")
+				current_state = state.WALK
+		
+		if movement_change.x != 0 or movement_change.y != 0:
+			if sprite_texture and movement_change.x > 0 and sprite_texture.flip_h:
+				sprite_texture.flip_h = false
+				walking_colision.position.x *= -1
+				hit_box.position.x *= -1
+			elif sprite_texture and movement_change.x < 0 and not sprite_texture.flip_h:
+				sprite_texture.flip_h = true
+				walking_colision.position.x *= -1
+				hit_box.position.x *= -1
+		else:
+			if animation_player.current_animation != "Idle":
+				animation_player.play("Idle")
+				current_state = state.IDLE
+		if Input.is_key_pressed(KEY_SPACE):
+			current_state = state.ATTACK
+			animation_player.play("Attack")
+		
 	# Camera zoom control
 	if Input.is_key_pressed(KEY_UP):
 		var camera = get_node_or_null("Camera2D") as Camera2D
@@ -416,11 +448,13 @@ func recalc_damage():
 	# Depends on weapon type, will be fixed later
 	for stat in DEPENDENCIES[Stats.Damage]:
 		check_if_dirty(stat)
-	damage = strength * 1.5 + strength * 0.5 * level
+	damage = strength * 0.5 + strength * 0.1 * level
 	if Stats.Damage in modified_stats.keys():
 		var mod_data = modified_stats[Stats.Damage]
 		damage = int(damage * mod_data[1] + mod_data[0])
 	damage = round(damage)
+	# if attack_area:
+	attack_area.damage = damage
 	dirtied_stats.erase(Stats.Damage)
 
 func recalc_weight_capacity():
@@ -530,3 +564,17 @@ func recalc_lightning_resist():
 		resistences["Lightning_Resist"] = resistences["Lightning_Resist"] * mod_data[1] + mod_data[0]
 	resistences["Lightning_Resist"] = round(resistences["Lightning_Resist"] * 100) / 100.0
 	dirtied_stats.erase(Stats.Lightning_Resist)
+
+func take_damage(dmg: int) -> void:
+	current_health -= max(dmg - defense, 0)
+	if current_health <= 0:
+		current_health = 0
+		die()
+
+func die() -> void:
+	# Handle player death (e.g., respawn, game over screen, etc.)
+	animation_player.play("Death")
+	walking_colision.disabled = true
+	attack_area.monitoring = false
+	hit_box.disabled = true
+	# Additional death handling code here

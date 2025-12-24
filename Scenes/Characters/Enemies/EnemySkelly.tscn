@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://dw1g7tg04c8xw"]
+[gd_scene load_steps=68 format=3 uid="uid://dw1g7tg04c8xw"]
 
 [ext_resource type="Script" uid="uid://dkd1cw5vl051b" path="res://Scripts/enemies.gd" id="1_sh5r7"]
 [ext_resource type="Texture2D" uid="uid://b5t0v82ueepu4" path="res://Images/Characters/Main Character/enemies-skeleton1_attack.png" id="2_21t5e"]
@@ -6,11 +6,17 @@
 [ext_resource type="Texture2D" uid="uid://dtag2ywndi30q" path="res://Images/Characters/Main Character/enemies-skeleton1_idle.png" id="4_cqi2s"]
 [ext_resource type="Texture2D" uid="uid://rf4yblbafx3j" path="res://Images/Characters/Main Character/enemies-skeleton1_movement.png" id="5_5snjj"]
 [ext_resource type="Texture2D" uid="uid://dwx0aegtouo4y" path="res://Images/Characters/Main Character/enemies-skeleton1_take_damage.png" id="6_vx147"]
+[ext_resource type="Script" uid="uid://buvcmrnlp7rr1" path="res://Scripts/weapon.gd" id="7_lmbs6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i02bu"]
+radius = 9.003471
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_peoje"]
+size = Vector2(12.625, 21.75)
 
 [sub_resource type="Animation" id="Animation_x51gi"]
 resource_name = "new_animation"
 length = 0.9
-loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -35,6 +41,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackBoxes/CollisionShape2D:shape")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [null, SubResource("CircleShape2D_i02bu"), SubResource("RectangleShape2D_peoje"), null]
 }
 
 [sub_resource type="Animation" id="Animation_ix8t7"]
@@ -121,6 +139,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [&"Attack"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AttackBoxes/CollisionShape2D:shape")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0009999999),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
 }
 
 [sub_resource type="Animation" id="Animation_tx8x6"]
@@ -646,3 +676,10 @@ shape = SubResource("CapsuleShape2D_xobn0")
 [node name="Walking Collision" type="CollisionShape2D" parent="."]
 position = Vector2(-2.5, 11)
 shape = SubResource("RectangleShape2D_x51gi")
+
+[node name="AttackBoxes" type="Area2D" parent="."]
+script = ExtResource("7_lmbs6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBoxes"]
+position = Vector2(2.125, 1.1875)
+rotation = 1.5707964

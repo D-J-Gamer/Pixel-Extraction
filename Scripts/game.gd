@@ -38,20 +38,20 @@ func make_map(_path: String):
 	map_sprite.position = Vector2.ZERO
 	map_sprite.scale = VECTOR2_MAP_SCALE
 	add_child(map_sprite)
-	set_map_collisions(map_path)
+	set_map_collisions()
 
 func set_player(player: Structures.Player):
 	player_node = load(player.scenePath).instantiate() as CharacterBody2D
 	# var player_node = PLAYER_SCRIPT.new()
-	player_node.set_player(player)
 	add_child(player_node)
+	player_node.set_player(player)
 	var spawn_positions = MapDetails.MAP_DATA[map_path]["Spawnpoints"]
 	var spawn_position = spawn_positions[randi() % len(spawn_positions)]
 	player_node.position = Vector2(spawn_position["x"], spawn_position["y"]) * MAP_SCALE * MAP_TILE_SIZE * UNKNOWN_CHARACTER_POS_SCALE
 	# player_node.position = Vector2(180, 120)
 	# center_camera_on(player_node)
 
-func set_map_collisions(map_path: String):
+func set_map_collisions():
 	for wall in MapDetails.MAP_DATA[map_path]["collisions"]["locations"]:
 		var wall_node = StaticBody2D.new()
 		var collision = CollisionShape2D.new()
@@ -100,8 +100,8 @@ func place_enemies(difficulty: int):
 			enemy_node.position = Vector2(pos_data["x"], pos_data["y"]) * MAP_SCALE * MAP_TILE_SIZE * UNKNOWN_CHARACTER_POS_SCALE
 			# temp
 			# enemy_node.position = Vector2(22, 8) * MAP_SCALE * MAP_TILE_SIZE * UNKNOWN_ENEMY_POS_SCALE
+			enemy_nodes.add_child(enemy_node)
 			enemy_node.set_enemy(difficulty_data["Enemy_Stats"][enemy_type])
 			area_copy.remove_at(pos_index)
 			positions_available -= 1
 			enemies.append(enemy_node)
-			enemy_nodes.add_child(enemy_node)

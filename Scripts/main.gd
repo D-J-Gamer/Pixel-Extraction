@@ -7,7 +7,8 @@ extends Control
 # 2 done
 # 3. Stats 
 # done
-# 4. Enemies which have stats 
+# 4. Enemies which have stats
+# done
 # 5. Inventory system as well as a temporary create item in inventory (so I can move it around) 
 # 6. Fighting (ability to kill enemies) 
 # 7. Way to interact with enemies' inventory 
