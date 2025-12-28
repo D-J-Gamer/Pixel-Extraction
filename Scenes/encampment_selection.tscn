@@ -244,6 +244,9 @@ font = SubResource("FontFile_ssx6j")
 font_size = 60
 
 [sub_resource type="FontFile" id="FontFile_4vs1u"]
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -554,8 +557,8 @@ vertical_alignment = 1
 [node name="ColorRect" type="ColorRect" parent="."]
 modulate = Color(0, 0, 0, 1)
 y_sort_enabled = true
-offset_right = 3816.0
-offset_bottom = 1891.0
+offset_right = 3840.0
+offset_bottom = 2160.0
 
 [node name="SaveExistsReminder" type="Label" parent="."]
 anchors_preset = 8

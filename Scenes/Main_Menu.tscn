@@ -217,8 +217,8 @@ horizontal_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="."]
 modulate = Color(0, 0, 0, 1)
-offset_right = 3816.0
-offset_bottom = 1891.0
+offset_right = 3840.0
+offset_bottom = 2160.0
 
 [node name="Menu_Buttons" type="Tree" parent="."]
 self_modulate = Color(1, 1, 1, 0)
