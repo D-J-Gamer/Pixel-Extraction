@@ -8,6 +8,7 @@ var animation_player: AnimationPlayer = null
 var sprite_texture: AnimatedSprite2D = null
 var walking_colision: CollisionShape2D = null
 var hit_box : CollisionShape2D = null
+var hit_box_node : Area2D = null
 var attack_area: Area2D = null
 var delta_time: float = 0.0
 const SECONDS_COUNT: int = 60
@@ -132,7 +133,7 @@ func _ready() -> void:
 	animation_player.play("Idle")
 	sprite_texture = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	walking_colision = get_node_or_null("Walking Collision") as CollisionShape2D
-	var hit_box_node = get_node_or_null("Area2D")
+	hit_box_node = get_node_or_null("Area2D")
 	hit_box = hit_box_node.get_node_or_null("Hit Box") as CollisionShape2D
 	attack_area = get_node_or_null("AttackBoxes") as Area2D
 	# attack_area = %AttackBoxes as Area2D
@@ -233,11 +234,11 @@ func _process(delta: float):
 			if sprite_texture and movement_change.x > 0 and sprite_texture.flip_h:
 				sprite_texture.flip_h = false
 				walking_colision.position.x *= -1
-				hit_box.position.x *= -1
+				hit_box_node.position.x *= -1
 			elif sprite_texture and movement_change.x < 0 and not sprite_texture.flip_h:
 				sprite_texture.flip_h = true
 				walking_colision.position.x *= -1
-				hit_box.position.x *= -1
+				hit_box_node.position.x *= -1
 		else:
 			if animation_player.current_animation != "Idle":
 				animation_player.play("Idle")

@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Structures="*res://Scripts/structures.gd"
 MapDetails="*res://Scripts/map_details.gd"
+CreateItem="*res://Scripts/create_item.gd"
 
 [display]
 

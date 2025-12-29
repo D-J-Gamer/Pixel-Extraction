@@ -5,12 +5,13 @@ signal slot_exited(slot)
 
 @onready var filter = $StatusFilter
 @export var type :Type
+@export var inventory_owner :Owner
 
 var slot_ID
 var is_hovering = false
 
 enum Type {DEFAULT, WEAPON, SHIELD, CONSUMABLE, HEADGEAR, CHESTPLATE, BOOTS, RING, AMULET, GLOVES}
-
+enum Owner {PLAYER, ENEMY, NONE}
 enum States {DEFAULT, TAKEN, FREE}
 var state = States.DEFAULT
 var item_stored = null

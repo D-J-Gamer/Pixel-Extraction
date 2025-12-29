@@ -10,7 +10,7 @@ extends Control
 # 4. Enemies which have stats
 # done
 # 5. Inventory system as well as a temporary create item in inventory (so I can move it around) 
-# partially done, don't have actual items to create yet, items don't modify stats yet, and enemies don't hold items yet.
+# partially done, items don't modify stats yet, and enemies don't hold items yet.
 # 6. Fighting (ability to kill enemies) 
 # 7. Way to interact with enemies' inventory 
 # 8. Actual player creation ui and way to customize character

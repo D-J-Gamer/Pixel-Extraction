@@ -1,3 +1,5 @@
+extends Node
+
 class Player:
 	var scenePath = ""
 	var name = ""
@@ -17,7 +19,7 @@ class Player:
 		#Defense(How well you can take a hit) = Armor: int(constant + Dexterity * modifier)
 		#Defence without armor = int(Dexterity * 0.5 * level + Constitution * 0.2 * level) (Whatever is higher is the left stat)
 		#Damage = Weapon: constant + Stat * modifier (Depends on weapon type)
-		#Damage without weapon = Strength * 1.5 + Strength * 0.5 * level
+		#Damage without weapon = Strength * 0.5 + Strength * 0.1 * level
 		#Weight_Capacity = Strength * 15
 		#Soft_Capacity = Strength * 7.5
 		#Base_Speed = 1 + Dexterity * 0.1 + Dexterity * 0.05 * level
@@ -112,3 +114,74 @@ class Enemy:
 	}
 	var flags = [] # To be iterated and matched for a function so enemies can have special behaviors
 	var drops = [] # List of items that can be dropped on death
+
+enum Type {DEFAULT, WEAPON, SHIELD, CONSUMABLE, HEADGEAR, CHESTPLATE, BOOTS, RING, AMULET, GLOVES, TRINKET}
+enum Stats {
+	Constitution,
+	Strength,
+	Dexterity,
+	Intelligence,
+	Wisdom,
+	Charisma,
+	Health,
+	Current_Health,
+	Mana,
+	Current_Mana,
+	Mana_Regen,
+	Stamina,
+	Defense,
+	Damage,
+	Weight_Capacity,
+	Base_Speed,
+	Weight_Ignore,
+	Speed,
+	Poison_Resist,
+	Magic_Resist,
+	Fire_Resist,
+	Cold_Resist,
+	Lightning_Resist,
+	Current_Weight,
+	Replacement_Damage
+}
+
+class Item:
+	var imagePath : String
+	var name : String
+	var type :Type
+	var rarity : int
+	var modifiers = {} # Dictionary of Stats enum to modifier value
+	# []
+	var weight : float
+	var size = [[0, 0]] # placement slots
+	var value = 0 # Monetary value
+	var description = ""
+	var replacement_damage = [0.0, 0.0, 0, Stats.Strength] # lower multipler, upper multiplier, base damage, stat used for damage calculation
+	var weapon_type: Weapons
+	var consumable_type: Consumables
+
+var items = {
+	Type.DEFAULT: Item.new(),
+	Type.WEAPON: Item.new(),
+	Type.SHIELD: Item.new(),
+	Type.CONSUMABLE: Item.new(),
+	Type.HEADGEAR: Item.new(),
+	Type.CHESTPLATE: Item.new(),
+	Type.BOOTS: Item.new(),
+	Type.RING: Item.new(),
+	Type.AMULET: Item.new(),
+	Type.GLOVES: Item.new()
+}
+
+enum Weapons {SWORD, AXE, DAGGER, STAFF} #, BOW} Bow currently not implemented
+enum Consumables {HEALTH_POTION, MANA_POTION}
+# var weapons = {
+# 	Weapons.SWORD: Item.new(),
+# 	Weapons.AXE: Item.new(),
+# 	Weapons.BOW: Item.new(),
+# 	Weapons.DAGGER: Item.new(),
+# 	Weapons.STAFF: Item.new()
+# }
+
+func _ready() -> void:
+	for item_keys in items.keys():
+		items[item_keys].type = item_keys
