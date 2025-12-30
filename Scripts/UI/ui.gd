@@ -188,7 +188,7 @@ func place_item():
 		var calculated_grid_id = current_slot.slot_ID + icon_anchor.x + icon_anchor.y * cols3
 		
 		var target_slot = grid_arrays[owner_index][calculated_grid_id]
-		var slot_center = target_slot.global_position + target_slot.size / 2.0
+		var slot_center = target_slot.global_position + target_slot.size / 4.0
 		
 		item_held.get_parent().remove_child(item_held)
 		grid_containers[owner_index].add_child(item_held)
@@ -203,13 +203,26 @@ func place_item():
 			var grid_to_check = current_slot.slot_ID + grid[0] + grid[1] * col_count
 			grid_arrays[owner_index][grid_to_check].state = grid_arrays[owner_index][grid_to_check].States.TAKEN
 			grid_arrays[owner_index][grid_to_check].item_stored = item_held
-	else:
+	else: # Will need to revisit to handle equipment slots properly in position
 		item_held.get_parent().remove_child(item_held)
 		current_slot.add_child(item_held)
 		
-		# Use local position relative to the slot (center of the slot)
+		# Center the item in equipment slot
+		# Container uses PRESET_CENTER, so it centers itself on the Node2D position
+		# Position Node2D at slot center - the preset handles centering for all sizes
 		var slot_center_local = current_slot.size / 2.0
+		var container_ratio_x = item_held.container.size.x / 100.0
+		var container_ratio_y = item_held.container.size.y / 100.0
 		item_held.position = slot_center_local
+		if container_ratio_x >= (current_slot.size.x / 100.0):
+			item_held.position.x = slot_center_local.x / container_ratio_x
+		else: item_held.position.x = slot_center_local.x / container_ratio_x
+		if container_ratio_y >= (current_slot.size.y / 100.0):
+			item_held.position.y = slot_center_local.y / container_ratio_y
+		else: item_held.position.y = slot_center_local.y / container_ratio_y * slot_center_local.y / 100.0
+		# item_held.position = Vector2(0, 0) # Adjustment for centering issues
+		# item_held.position = slot_center_local - Vector2(100, 100)
+		# item_held.position = slot_center_local - item_held.container.size / 2.0
 		item_held.selected = false
 		
 		item_held.grid_anchor = current_slot
@@ -242,10 +255,11 @@ func pickup_item():
 	check_slot_availability(current_slot)
 	set_grids.call_deferred(current_slot)
 
-func add_item(item: Node2D) -> bool:
-	# var new_item = item_scene.instantiate()
+func add_item(item_deets: Structures.Item) -> bool:
+	# Create the item and load it with the provided details
+	var item = item_scene.instantiate()
 	add_child(item)
-	item.load_item(0)
+	item.load_item(item_deets)
 	# item.selected = true
 	# item_held = item
 	# Add an already-created item to the enemy inventory at the top-left most available position
@@ -277,30 +291,42 @@ func add_item(item: Node2D) -> bool:
 				can_fit = false
 				break
 		
-		# If we found a valid position, place the item here
+		# If we found a valid position, use place_item() to handle the placement
 		if can_fit:
-			# Add item to container
-			if item.get_parent():
-				item.get_parent().remove_child(item)
-			enemy_container.add_child(item)
-			var slot_center = test_slot.global_position + test_slot.size / 2.0
-			item.global_position = slot_center
-			item.selected = false
-			item.grid_anchor = test_slot
-			
-			# Mark all occupied slots as taken
+			# # Add item to container
+			# if item.get_parent():
+			# 	item.get_parent().remove_child(item)
+			# enemy_container.add_child(item)
+			# var slot_center = test_slot.global_position + test_slot.size / 2.0
+			# item.global_position = slot_center
+			# item.selected = false
+			# item.grid_anchor = test_slot
+			# Set up pre-requisites for place_item()
+			item_held = item
+			current_slot = test_slot
+			can_place = true
+			icon_anchor = Vector2(0, 0)
+			# Calculate icon_anchor (minimum coordinates in item_size)
 			for grid_pos in item.item_size:
-				var grid_to_check = slot_id + grid_pos[0] + grid_pos[1] * cols
-				enemy_grid[grid_to_check].state = enemy_grid[grid_to_check].States.TAKEN
-				enemy_grid[grid_to_check].item_stored = item
+				# var grid_to_check = slot_id + grid_pos[0] + grid_pos[1] * cols
+				# enemy_grid[grid_to_check].state = enemy_grid[grid_to_check].States.TAKEN
+				# enemy_grid[grid_to_check].item_stored = item
+				if grid_pos[0] < icon_anchor.x: 
+					icon_anchor.x = grid_pos[0]
+				if grid_pos[1] < icon_anchor.y: 
+					icon_anchor.y = grid_pos[1]
 			
+			# Call place_item() to handle the actual placement
+			place_item()
 			return true
 	
-	# No space found
+	# No space found - clean up the item
+	item.queue_free()
 	return false
 
 
 func _on_enemy_button_down() -> void:
-	var item = item_scene.instantiate()
+	# var item = item_scene.instantiate()
 	# item.load_item(0)
-	add_item(item)
+	# add_item(item)
+	pass

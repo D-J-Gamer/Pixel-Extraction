@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://u6y63o4kjcwx"]
+[gd_scene load_steps=5 format=3 uid="uid://u6y63o4kjcwx"]
 
 [ext_resource type="Script" uid="uid://lgyxphpfdwdf" path="res://Scripts/UI/ui.gd" id="1_636u5"]
 [ext_resource type="PackedScene" uid="uid://jpgrhlpfc20v" path="res://Scenes/UI/Slot.tscn" id="2_636u5"]
 [ext_resource type="Texture2D" uid="uid://wwmqdsahterd" path="res://Images/Characters/Main Character/skeleton2_v2_2.png" id="3_akgwn"]
+[ext_resource type="PackedScene" uid="uid://b2ay3xb48p4fo" path="res://Scenes/UI/Item.tscn" id="3_b83rk"]
 
 [node name="UI" type="Control"]
 layout_mode = 3
@@ -14,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_636u5")
 
 [node name="Inventory" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -75,6 +77,8 @@ type = 7
 [node name="Slot5" parent="Inventory/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer/GridContainer" groups=["equipment_slots", "player_equipment_slots"] instance=ExtResource("2_636u5")]
 layout_mode = 2
 type = 7
+
+[node name="Item" parent="Inventory/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer/GridContainer" instance=ExtResource("3_b83rk")]
 
 [node name="GridContainer2" type="GridContainer" parent="Inventory/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -164,6 +168,7 @@ layout_mode = 2
 type = 3
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="Inventory/MarginContainer/VBoxContainer"]
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -180,6 +185,7 @@ custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 
 [node name="Enemy Inventory" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 offset_right = 1280.0
 offset_bottom = 1880.0
@@ -340,6 +346,7 @@ type = 3
 inventory_owner = 1
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="Enemy Inventory/MarginContainer/VBoxContainer" groups=["player_equipment_slots"]]
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

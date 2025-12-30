@@ -84,6 +84,7 @@ func place_enemies(difficulty: int):
 	var min_enemies: int = difficulty_data["Min_Enemies_Per_Area"]
 	var enemy_nodes: Node2D = Node2D.new()
 	add_child(enemy_nodes)
+	CreateItem.update_worth_ranges()
 	for area in enemy_data["EnemyPositions"]:
 		var area_copy = area.duplicate()
 		var num_enemies = randi() % (max_enemies - min_enemies + 1) + min_enemies
@@ -104,4 +105,10 @@ func place_enemies(difficulty: int):
 			enemy_node.set_enemy(difficulty_data["Enemy_Stats"][enemy_type])
 			area_copy.remove_at(pos_index)
 			positions_available -= 1
+			# Add items to enemy inventory
+			for j in range(randi() % (difficulty_data["Enemy_item_count"][1] - difficulty_data["Enemy_item_count"][0] + 1) + difficulty_data["Enemy_item_count"][0]):
+				var new_item = null
+				new_item = CreateItem.create_item(difficulty_data["Loot_rating"][0], difficulty_data["Loot_rating"][1])
+				enemy_node.inventory.append(new_item)
+
 			enemies.append(enemy_node)

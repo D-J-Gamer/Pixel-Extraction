@@ -158,6 +158,7 @@ class Item:
 	var replacement_damage = [0.0, 0.0, 0, Stats.Strength] # lower multipler, upper multiplier, base damage, stat used for damage calculation
 	var weapon_type: Weapons
 	var consumable_type: Consumables
+	var rating: int = 0
 
 var items = {
 	Type.DEFAULT: Item.new(),

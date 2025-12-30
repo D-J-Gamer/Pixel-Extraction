@@ -10,9 +10,11 @@ extends Control
 # 4. Enemies which have stats
 # done
 # 5. Inventory system as well as a temporary create item in inventory (so I can move it around) 
-# partially done, items don't modify stats yet, and enemies don't hold items yet.
+# partially done, items don't modify stats yet.
 # 6. Fighting (ability to kill enemies) 
+# I can fight enemies, but they don't have a way to fight back yet.
 # 7. Way to interact with enemies' inventory 
+# done
 # 8. Actual player creation ui and way to customize character
 
 const MAIN_MENU := preload("res://Scripts/main_menu.gd")
@@ -68,11 +70,14 @@ func encampment_selection_to_encampment(encampment_name: String) -> bool:
 func encampment_to_game() -> void:
 	print("Encampment to game... ", "Difficulty: ",encampment.get_difficulty(), " Map path: ", encampment.get_map_path(), " Player: ", encampment.get_player())
 	save_game()
+	MapDetails.set_map_path(encampment.get_map_path())
+	MapDetails.set_difficulty(encampment.get_difficulty())
 	game = GAME.create_instance()
 	add_child(game)
 	game.make_map(encampment.get_map_path())
 	game.set_player(encampment.get_player())
 	game.place_enemies(encampment.get_difficulty())
+	# print("Map path", MapDetails.map_path)
 	# Will add difficulty later
 	game.main = self
 	encampment.queue_free()

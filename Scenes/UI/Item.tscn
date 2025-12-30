@@ -1,19 +1,74 @@
-[gd_scene load_steps=2 format=3 uid="uid://b2ay3xb48p4fo"]
+[gd_scene load_steps=4 format=3 uid="uid://b2ay3xb48p4fo"]
 
 [ext_resource type="Script" uid="uid://blgx1yt1hs62i" path="res://Scripts/UI/item.gd" id="1_wmmth"]
+
+[sub_resource type="FontFile" id="FontFile_wmmth"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/32/0/ascent = 0.0
+cache/0/32/0/descent = 0.0
+cache/0/32/0/underline_position = 0.0
+cache/0/32/0/underline_thickness = 0.0
+cache/0/32/0/scale = 1.0
+cache/0/50/0/ascent = 0.0
+cache/0/50/0/descent = 0.0
+cache/0/50/0/underline_position = 0.0
+cache/0/50/0/underline_thickness = 0.0
+cache/0/50/0/scale = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_u0set"]
+font = SubResource("FontFile_wmmth")
+font_size = 32
 
 [node name="Item" type="Node2D"]
 script = ExtResource("1_wmmth")
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control"]
+layout_mode = 1
+
+[node name="Label" type="Label" parent="."]
+visible = false
+z_index = 3
+custom_minimum_size = Vector2(500, 0)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -250.0
+grow_horizontal = 0
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_u0set")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="Label"]
+z_index = -1
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 250.0
+color = Color(0.20906562, 0.20906562, 0.20906562, 0.642)
+
+[connection signal="mouse_entered" from="Control" to="." method="_on_control_mouse_entered"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_control_mouse_exited"]
+[connection signal="mouse_entered" from="Control/Icon" to="." method="_on_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Icon" to="." method="_on_icon_mouse_exited"]

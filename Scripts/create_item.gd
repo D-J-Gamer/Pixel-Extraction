@@ -17,11 +17,11 @@ var rarity_worth_ranges: Dictionary = {
 
 # [constant worth, multiplier worth]
 var cost_per_modifier: Dictionary = {
-	Stats.Constitution: {"constant": 5, "percentile": 5, "constant_add": 1},
-	Stats.Strength: {"constant": 5, "percentile": 5, "constant_add": 1},
-	Stats.Dexterity: {"constant": 5, "percentile": 5, "constant_add": 1},
-	Stats.Intelligence: {"constant": 5, "percentile": 5, "constant_add": 1},
-	Stats.Wisdom: {"constant": 5, "percentile": 5, "constant_add": 1},
+	Stats.Constitution: {"constant": 20, "percentile": 5, "constant_add": 1},
+	Stats.Strength: {"constant": 20, "percentile": 5, "constant_add": 1},
+	Stats.Dexterity: {"constant": 20, "percentile": 5, "constant_add": 1},
+	Stats.Intelligence: {"constant": 20, "percentile": 5, "constant_add": 1},
+	Stats.Wisdom: {"constant": 20, "percentile": 5, "constant_add": 1},
 	# Stats.Charisma: {"constant": 5, "percentile": 100, "constant_add": 1},
 	Stats.Health: {"constant": 1, "percentile": 5, "constant_add": 1},
 	Stats.Mana: {"constant": 1, "percentile": 5, "constant_add": 1},
@@ -62,10 +62,29 @@ func calculate_worth(lower_worth: int, upper_worth: int) -> int:
 func set_worth_ranges(worth_ranges: Dictionary) -> void:
 	rarity_worth_ranges = worth_ranges
 
+func update_worth_ranges(difficulty: int = MapDetails.current_difficulty) -> void:
+	var _string: String = ""
+	match difficulty:
+		0: _string = "Easy"
+		1: _string = "Normal"
+		2: _string = "Hard"
+		3: _string = "Insane"
+		4: _string = "Legendary"
+	var map_worth_ranges = MapDetails.MAP_DATA[MapDetails.map_path]["difficulty"][_string]["Rarity_Distribution"]
+	print("Map path: ", MapDetails.map_path)
+	# var map_worth_ranges = MapDetails.MAP_DATA[MapDetails.map_path]
+	# print(map_worth_ranges)
+	# assert(false)
+	for i in Rarity.values():
+		rarity_worth_ranges[i] = map_worth_ranges[i]
+	# set_worth_ranges(map_worth_ranges)
+
 func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structures.Type.DEFAULT) -> Structures.Item:
 	var budget = calculate_worth(lower_worth, upper_worth)
+	var rating = budget
 	var new_item = Structures.Item.new()
 	var value = 0
+	new_item.rating = rating
 	if item_type != Structures.Type.DEFAULT:
 		new_item.type = item_type
 	else:
@@ -78,14 +97,17 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 		# print("Randomly selected item type: ", new_item.type)
 	
 	if new_item.type == Type.WEAPON:
-		var weapon_types = Weapons.keys()
+		var weapon_types = Weapons.values()  # Use .values() instead of .keys() to get the integer enum values
 		var random_weapon_index = randi() % weapon_types.size()
+		# print(weapon_types.size())
 		new_item.weapon_type = weapon_types[random_weapon_index]
+		# print("Randomly selected weapon type: ", new_item.weapon_type)
+		#print("Supposed to get: ", weapon_types.keys()[random_weapon_index])
 	
 	var rarity_candidates = []
 	for rarity in Rarity.values():
 		var worth_range = rarity_worth_ranges[rarity]
-		if worth_range[0] <= budget <= worth_range[1]:
+		if worth_range[0] <= budget and budget <= worth_range[1]:
 			rarity_candidates.append(rarity)
 	var selected_rarity = Rarity.COMMON
 	if rarity_candidates.size() > 0:
@@ -121,23 +143,23 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 		var weapon_per_stat_cost = weapon_costs["per_stat"]
 		if budget >= weapon_constant_cost:
 			var max_constant_increases = (budget - modifier_count * 5) / weapon_constant_cost
-			var constant_increases = randi() % (max_constant_increases + 1)
+			var constant_increases = randi() % (max_constant_increases + 1 - 1) + 1 # Ensure at least 1 increase
 			if constant_increases > 0:
 				new_item.replacement_damage[2] = constant_increases
 				budget -= constant_increases * weapon_constant_cost
-				value += constant_increases * weapon_constant_cost
+				# value += constant_increases * weapon_constant_cost
 		if budget >= weapon_per_stat_cost:
 			var max_per_stat_increases = (budget - (modifier_count - 1) * 5) / weapon_per_stat_cost
-			var per_stat_increases = randi() % (max_per_stat_increases + 1)
+			var per_stat_increases = randi() % (max_per_stat_increases + 1 - 1) + 1 # Ensure at least 1 increase
 			if per_stat_increases > 0:
 				new_item.replacement_damage[0] = per_stat_increases * 0.1
 				new_item.replacement_damage[1] = per_stat_increases * 0.15
 				budget -= per_stat_increases * weapon_per_stat_cost
-				value += per_stat_increases * weapon_per_stat_cost
+				# value += per_stat_increases * weapon_per_stat_cost
 		new_item.replacement_damage[3] = base_damage_stat
 		new_item.modifiers[Stats.Replacement_Damage] = new_item.replacement_damage
 		modifiers_added.append(Stats.Replacement_Damage)
-		stat_keys.remove(Stats.Damage)
+		stat_keys.erase(Stats.Damage)
 
 	if new_item.type in [Type.SHIELD, Type.HEADGEAR, Type.CHESTPLATE, Type.BOOTS, Type.GLOVES]:
 		# Ensure Defense is added for armor pieces
@@ -146,18 +168,18 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 			var defense_constant_cost = defense_costs["constant"]
 			if budget >= defense_constant_cost:
 				var max_defense_increases = (budget - (modifier_count - 1) * 5) / defense_constant_cost
-				var defense_increases = randi() % (max_defense_increases + 1)
+				var defense_increases = randi() % (max_defense_increases + 1 - 1) + 1 # Ensure at least 1 increase
 				if defense_increases > 0:
 					new_item.modifiers[Stats.Defense] = [defense_increases * defense_costs["constant_add"], 0]
 					budget -= defense_increases * defense_constant_cost
-					value += defense_increases * defense_constant_cost
+					# value += defense_increases * defense_constant_cost
 					modifiers_added.append(Stats.Defense)
-					stat_keys.remove(Stats.Defense)
+					stat_keys.erase(Stats.Defense)
 
-	stat_keys.remove(Stats.Replacement_Damage)
-	stat_keys.remove(Stats.Charisma)
-	stat_keys.remove(Stats.Current_Weight)
-	stat_keys.remove(Stats.Weight_Ignore)
+	stat_keys.erase(Stats.Replacement_Damage)
+	stat_keys.erase(Stats.Charisma)
+	stat_keys.erase(Stats.Current_Weight)
+	stat_keys.erase(Stats.Weight_Ignore)
 	while budget > 0 and new_item.type != Type.CONSUMABLE:
 		var random_stat_index = randi() % stat_keys.size()
 		var selected_stat = stat_keys[random_stat_index]
@@ -169,8 +191,9 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 		var cost = costs[selected_cost_type]
 		if budget >= cost:
 			if selected_cost_type == "constant":
-				var max_increases = (budget - (modifier_count - len(modifiers_added) - 1) * 5) / cost
-				var increases = randi() % (max_increases + 1)
+				var max_increases = int((budget - (modifier_count - len(modifiers_added) - 1) * 5) / cost)
+				if max_increases <= 0: max_increases = 1
+				var increases = randi() % (max_increases + 1 - 1) + 1 # Ensure at least 1 increase
 				if modifier_count - len(modifiers_added) == 1: # Last modifier, use all remaining budget
 					increases = max_increases
 					budget = 0
@@ -179,10 +202,11 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 					new_item.modifiers[selected_stat] = [increases * costs["constant_add"], 0]
 					modifiers_added.append(selected_stat)
 			else: # percentile
-				var max_increases = (budget - (modifier_count - len(modifiers_added) - 1) * 5) / cost
-				var increases = randi() % (max_increases + 1) / 100.0
+				var max_increases = int((budget - (modifier_count - len(modifiers_added) - 1) * 5) / cost)
+				if max_increases <= 0: max_increases = 1
+				var increases = randi() % (max_increases + 1 - 1) / 100.0 + 0.01 # Ensure at least 1% increase
 				if modifier_count - len(modifiers_added) == 1: # Last modifier, use all remaining budget
-					increases = max_increases
+					increases = max_increases / 100.0
 					budget = 0
 				if increases > 0:
 					new_item.modifiers[selected_stat] = [0, increases]
@@ -193,15 +217,15 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 	
 	match selected_rarity:
 		Rarity.COMMON:
-			value = int(value * 0.25)
+			value = int(rating * 0.25)
 		Rarity.UNCOMMON:
-			value = int(value * 0.35)
+			value = int(rating * 0.35)
 		Rarity.RARE:
-			value = int(value * 0.5)
+			value = int(rating * 0.5)
 		Rarity.EPIC:
-			value = int(value * 0.75)
+			value = int(rating * 0.75)
 		Rarity.LEGENDARY:
-			value = int(value * 1.0)
+			value = int(rating * 1.0)
 	new_item.value = value
 
 	match new_item.type:

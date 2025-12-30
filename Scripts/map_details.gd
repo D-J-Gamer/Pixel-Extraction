@@ -1,3 +1,5 @@
+extends Node
+
 const MAP_DATA: Dictionary = {
     "res://Maps/Dungeon.png": {
         "name": "Dungeon",
@@ -529,7 +531,10 @@ const MAP_DATA: Dictionary = {
             "Enemy_Stats": [
                 {"Exp": 2, "Health": 20, "Mana": 0, "Mana_Regen": 0.0, "Defence": 1, "Damage": 4, "Speed": 1.5, "Poison_Resist": 0.5, "Magic_Resist": 0.2, "Fire_Resist": 0.2, "Cold_Resist": 0.2, "Lightning_Resist": 0.2},
                 {"Exp": 2, "Health": 25, "Mana": 0, "Mana_Regen": 0.0, "Defence": 2, "Damage": 5, "Speed": 1.0, "Poison_Resist": 0.5, "Magic_Resist": 0.2, "Fire_Resist": 0.2, "Cold_Resist": 0.2, "Lightning_Resist": 0.2}
-            ]
+            ],
+            "Loot_rating": [50, 150], # Lower Bound, Upper Bound
+            "Rarity_Distribution": [[0, 100], [100, 150], [150, 250], [200, 300], [250, 300]], # Common, Uncommon, Rare, Epic, Legendary
+            "Enemy_item_count": [1, 2] # Min, Max
         },
         "Medium": 2, "Hard": 3, "Insane": 4, "Legendary": 5
         },
@@ -553,3 +558,16 @@ const MAP_DATA: Dictionary = {
         ]
     }
 }
+
+var map_path = ""
+var current_difficulty = 0
+var player_base_stats = {}
+
+func set_map_path(path: String) -> void:
+    map_path = path
+
+func set_difficulty(difficulty: int) -> void:
+    current_difficulty = difficulty
+
+func set_player_base_stats(stats: Dictionary) -> void:
+    player_base_stats = stats

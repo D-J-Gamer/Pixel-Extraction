@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://dhkssk2ona8ro"]
+[gd_scene load_steps=82 format=3 uid="uid://dhkssk2ona8ro"]
 
 [ext_resource type="Script" uid="uid://dkd1cw5vl051b" path="res://Scripts/enemies.gd" id="1_c40ue"]
 [ext_resource type="Texture2D" uid="uid://ccjqq1murpg4u" path="res://Images/Characters/Enemy characters/enemies-skeleton2_attack.png" id="2_1h2df"]
@@ -713,6 +713,9 @@ animations = [{
 radius = 6.25
 height = 16.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1h2df"]
+size = Vector2(90, 90)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x51gi"]
 size = Vector2(15.25, 5)
 
@@ -739,6 +742,12 @@ position = Vector2(-2.75, 5.5)
 position = Vector2(0.75, -0.25)
 shape = SubResource("CapsuleShape2D_xobn0")
 
+[node name="GrabInventory" type="Area2D" parent="Area2D"]
+scale = Vector2(0.25, 0.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D/GrabInventory"]
+shape = SubResource("RectangleShape2D_1h2df")
+
 [node name="Walking Collision" type="CollisionShape2D" parent="."]
 position = Vector2(-0.875, 11)
 shape = SubResource("RectangleShape2D_x51gi")
@@ -748,3 +757,6 @@ script = ExtResource("7_1h2df")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBoxes"]
 position = Vector2(1.5625, 4.9375)
+
+[connection signal="area_entered" from="Area2D/GrabInventory" to="." method="_on_inventory_area_entered"]
+[connection signal="area_exited" from="Area2D/GrabInventory" to="." method="_on_inventory_area_exited"]

@@ -7,6 +7,8 @@ var sprite_texture: AnimatedSprite2D = null
 var walking_colision: CollisionShape2D = null
 var hit_box: CollisionShape2D = null
 var attack_area: Area2D = null
+var inventory_area: Area2D = null
+var player_character: PlayerCharacter = null
 
 var death_exp: int = 0
 var health: int = 0
@@ -24,6 +26,10 @@ var resistences: Dictionary = {
 	"Cold": 0.0,
 	"Lightning": 0.0
 }
+var inventory: Array = [] # To be filled with Structures.Item instances
+enum EnemyState {IDLE, WALKING, ATTACKING, DEAD}
+var current_state: EnemyState = EnemyState.IDLE
+var can_open_inventory: bool = false
 
 func _ready() -> void:
 	animation_player = get_node_or_null("Animations") as AnimationPlayer
@@ -33,8 +39,11 @@ func _ready() -> void:
 	var hit_box_node = get_node_or_null("Area2D")
 	hit_box = hit_box_node.get_node_or_null("Hit Box") as CollisionShape2D
 	attack_area = get_node_or_null("AttackBoxes") as Area2D
+	inventory_area = hit_box_node.get_node_or_null("GrabInventory") as Area2D
+	inventory_area.set_deferred("monitoring", false)
 	# attack_area = %AttackBoxes as Area2D
 	attack_area.character_owner = "Enemy"
+	set_process_unhandled_input(true)
 
 func set_enemy(enemy_stats: Dictionary): 
 	#{"Exp": 2, "Health": 20, "Mana": 0, "Mana_Regen": 0.0, "Defence": 1, "Damage": 4, "Speed": 1.5, "Poison_Resist": 0.5, "Magic_Resist": 0.2, "Fire_Resist": 0.2, "Cold_Resist": 0.2, "Lightning_Resist": 0.2}
@@ -55,6 +64,8 @@ func set_enemy(enemy_stats: Dictionary):
 	resistences["Lightning"] = enemy_stats["Lightning_Resist"]
 
 func take_damage(dmg: int) -> void:
+	if current_state == EnemyState.DEAD:
+		return
 	current_health -= max(dmg - defence, 0)
 	if current_health <= 0:
 		current_health = 0
@@ -64,7 +75,30 @@ func die() -> void:
 	animation_player.play("Death")
 	# $Walking Collision.disabled = true
 	walking_colision.set_deferred("disabled", true)
-	$Area2D.set_deferred("monitoring", false)
-	hit_box.set_deferred("disabled", true)
+	# $Area2D.set_deferred("monitoring", false)
+	# hit_box.set_deferred("disabled", true)
+	inventory_area.set_deferred("monitoring", true)
+	current_state = EnemyState.DEAD
 	# yield(animation_player, "animation_finished")
 	# queue_free()
+
+
+func _on_inventory_area_entered(area: Area2D) -> void:
+	if area.get_parent() is PlayerCharacter and area is not Weapon:
+		if sprite_texture:
+			sprite_texture.modulate = Color(0.65, 0.75, 1.2, 1.0) # blue tint when player is in range
+		player_character = area.get_parent() as PlayerCharacter
+		can_open_inventory = true
+
+func _on_inventory_area_exited(area: Area2D) -> void:
+	if area.get_parent() is PlayerCharacter and area is not Weapon:
+		if sprite_texture:
+			sprite_texture.modulate = Color(1, 1, 1, 1) # clear tint when leaving
+		player_character = null
+		can_open_inventory = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if can_open_inventory and event.is_action_pressed("interact"):
+		for item in inventory:
+			player_character.ui.add_item(item)
+		inventory.clear()

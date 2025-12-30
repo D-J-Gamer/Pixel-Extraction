@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name PlayerCharacter
 
+@onready var ui = $Camera2D/Container/UI
+
 # var texturePath: String = ""
 # var sprite: Node2D = null
 var animation_player: AnimationPlayer = null
@@ -180,6 +182,7 @@ func set_player(player: Structures.Player):
 	# resistences["Cold_Resist"] = constitution / (constitution + 50)
 	# resistences["Lightning_Resist"] = constitution / (constitution + 50)
 
+	MapDetails.set_player_base_stats(base_stats)
 	inventory = player.inventory
 	equippedItems = player.equippedItems
 	set_item_modifiers()
