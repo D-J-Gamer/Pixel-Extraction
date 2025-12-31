@@ -70,5 +70,3 @@ color = Color(0.20906562, 0.20906562, 0.20906562, 0.642)
 
 [connection signal="mouse_entered" from="Control" to="." method="_on_control_mouse_entered"]
 [connection signal="mouse_exited" from="Control" to="." method="_on_control_mouse_exited"]
-[connection signal="mouse_entered" from="Control/Icon" to="." method="_on_icon_mouse_entered"]
-[connection signal="mouse_exited" from="Control/Icon" to="." method="_on_icon_mouse_exited"]

@@ -171,7 +171,7 @@ func create_description() -> String:
 					parts.append("%s%s" % [sign, formatted])
 				if mod_value[1] != 0:
 					var sign = "x" if mod_value[1] > 0 else "x"
-					parts.append("%s%.1f%%" % [sign, mod_value[1] * 100 + 100])
+					parts.append("%s%d%%" % [sign, int(mod_value[1] * 100) + 100])
 				if parts.size() > 0:
 					desc += "\n%s: %s" % [stat_name.to_lower(), " ".join(parts)]
 			else:
@@ -209,3 +209,19 @@ func _on_control_mouse_exited() -> void:
 
 # func _on_control_mouse_entered() -> void:
 # 	pass # Replace with function body.
+func return_item_details() -> Structures.Item:
+	var item_deets = Structures.Item.new()
+	item_deets.imagePath = imagePath
+	item_deets.size = item_size
+	# item_deets.name = name
+	item_deets.type = item_type
+	item_deets.rarity = rarity
+	item_deets.modifiers = modifiers
+	item_deets.weight = weight
+	item_deets.value = value
+	item_deets.description = description
+	item_deets.replacement_damage = replacement_damage
+	item_deets.weapon_type = weapon_type
+	item_deets.consumable_type = consumable_type
+	item_deets.rating = rating
+	return item_deets

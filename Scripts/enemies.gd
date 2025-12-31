@@ -55,7 +55,8 @@ func set_enemy(enemy_stats: Dictionary):
 	mana_regen = enemy_stats["Mana_Regen"]
 	defence = enemy_stats["Defence"]
 	damage = enemy_stats["Damage"]
-	attack_area.damage = damage
+	attack_area.min_damage = damage
+	attack_area.max_damage = damage
 	speed = enemy_stats["Speed"]
 	resistences["Poison"] = enemy_stats["Poison_Resist"]
 	resistences["Magic"] = enemy_stats["Magic_Resist"]
@@ -94,11 +95,17 @@ func _on_inventory_area_exited(area: Area2D) -> void:
 	if area.get_parent() is PlayerCharacter and area is not Weapon:
 		if sprite_texture:
 			sprite_texture.modulate = Color(1, 1, 1, 1) # clear tint when leaving
+		var temp_inventory = []
+		inventory += player_character.ui.free_enemy_inventory()
 		player_character = null
 		can_open_inventory = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if can_open_inventory and event.is_action_pressed("interact"):
+		player_character.ui.enemy_inventory.show()
+		player_character.ui.enemy_inventory_open = true
+		player_character.ui.inventory.show()
+		player_character.ui.inventory_open = true
 		for item in inventory:
 			player_character.ui.add_item(item)
 		inventory.clear()

@@ -11,6 +11,7 @@ extends Control
 @onready var inventory = $Inventory
 @onready var enemy_inventory = $"Enemy Inventory"
 @onready var enemy_margin_container = $"Enemy Inventory/MarginContainer"
+@onready var current_weight_label = $Inventory/MarginContainer/VBoxContainer/Footer/Control/Label
 
 
 # @onready var equipment_slots = [
@@ -40,6 +41,7 @@ var icon_anchor : Vector2
 var inventory_open = false
 var enemy_inventory_open = false
 var last_slot = null
+var player_character: PlayerCharacter = null
 # var inventory_open = true # temp code
 
 # Called when the node enters the scene tree for the first time.
@@ -67,9 +69,10 @@ func _process(delta: float) -> void:
 		else:
 			inventory.show()
 			inventory_open = true
+			update_current_weight_label()
 			can_place = false
-			enemy_inventory.show()
-			enemy_inventory_open = true
+			# enemy_inventory.show()
+			# enemy_inventory_open = true
 	if inventory_open:
 		if item_held:
 			if Input.is_action_just_pressed("mouse_leftclick"):
@@ -179,7 +182,7 @@ func clear_grid():
 	for slot in get_tree().get_nodes_in_group("equipment_slots"):
 		slot.set_color(slot.States.DEFAULT)
 
-func place_item():
+func place_item(modify_weight: bool = true) -> void:
 	if not can_place or not current_slot:
 		return
 	var owner_index = current_slot.inventory_owner
@@ -192,7 +195,7 @@ func place_item():
 		
 		item_held.get_parent().remove_child(item_held)
 		grid_containers[owner_index].add_child(item_held)
-		item_held.global_position = get_global_mouse_position()
+		# item_held.global_position = get_global_mouse_position()
 		# item_held._snap_to(grid_array[calculated_grid_id].global_position)
 		# item_held._snap_to(slot_center)
 		item_held.global_position = slot_center
@@ -206,7 +209,8 @@ func place_item():
 	else: # Will need to revisit to handle equipment slots properly in position
 		item_held.get_parent().remove_child(item_held)
 		current_slot.add_child(item_held)
-		
+		player_character.apply_item_buff(item_held)
+		# update_current_weight_label()
 		# Center the item in equipment slot
 		# Container uses PRESET_CENTER, so it centers itself on the Node2D position
 		# Position Node2D at slot center - the preset handles centering for all sizes
@@ -229,6 +233,10 @@ func place_item():
 		current_slot.state = current_slot.States.TAKEN
 		current_slot.item_stored = item_held
 	
+	if owner_index == current_slot.Owner.ENEMY and modify_weight:
+		player_character.remove_weight(item_held.weight)
+	update_current_weight_label()
+
 	item_held = null
 	clear_grid()
 
@@ -246,12 +254,16 @@ func pickup_item():
 	if current_slot.type != current_slot.Type.DEFAULT:
 		current_slot.state = current_slot.States.FREE
 		current_slot.item_stored = null
+		player_character.remove_item_buff(item_held)
+		# update_current_weight_label()
 	else:
 		for grid_pos in item_held.item_size:
 			var grid_to_check = item_held.grid_anchor.slot_ID + grid_pos[0] + grid_pos[1] * col_count
 			grid_arrays[owner_index][grid_to_check].state = grid_arrays[owner_index][grid_to_check].States.FREE
 			grid_arrays[owner_index][grid_to_check].item_stored = null
-	
+	if owner_index == current_slot.Owner.ENEMY:
+		player_character.add_weight(item_held.weight)
+	update_current_weight_label()
 	check_slot_availability(current_slot)
 	set_grids.call_deferred(current_slot)
 
@@ -317,16 +329,57 @@ func add_item(item_deets: Structures.Item) -> bool:
 					icon_anchor.y = grid_pos[1]
 			
 			# Call place_item() to handle the actual placement
-			place_item()
+			place_item(false)
 			return true
 	
 	# No space found - clean up the item
 	item.queue_free()
 	return false
 
+func free_enemy_inventory() -> Array:
+	var free_items = []
+	var processed_items: Array = []
+	for slot in enemy_grid_array:
+		if not slot.item_stored:
+			continue
+		var item_ref = slot.item_stored
+		# Skip if we've already freed this multi-slot item
+		if processed_items.has(item_ref):
+			continue
+		processed_items.append(item_ref)
+		var item_details: Structures.Item = item_ref.return_item_details()
+		free_items.append(item_details)
+		# Clear all slots occupied by this item
+		for s in enemy_grid_array:
+			if s.item_stored == item_ref:
+				s.state = s.States.FREE
+				s.item_stored = null
+		item_ref.queue_free()
+	for slot in get_tree().get_nodes_in_group("equipment_slots"):
+		if not slot.item_stored:
+			continue
+		if slot.item_stored == null or slot.inventory_owner != slot.Owner.ENEMY:
+			continue
+		free_items.append(slot.item_stored.return_item_details())
+		slot.item_stored.queue_free()
+		slot.item_stored = null
+	if item_held and last_slot.inventory_owner == last_slot.Owner.ENEMY:
+		free_items.append(item_held.return_item_details())
+		player_character.remove_weight(item_held.weight)
+		update_current_weight_label()
+		item_held.queue_free()
+		item_held = null
+	enemy_inventory.hide()
+	enemy_inventory_open = false
+	return free_items
 
 func _on_enemy_button_down() -> void:
 	# var item = item_scene.instantiate()
 	# item.load_item(0)
 	# add_item(item)
 	pass
+
+func update_current_weight_label() -> void:
+	var current_weight = player_character.get_current_weight()
+	var weight_capacity = player_character.weight_capacity
+	current_weight_label.text = "Weight: " + str(current_weight) + " / " + str(weight_capacity)

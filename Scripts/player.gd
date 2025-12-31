@@ -40,30 +40,33 @@ var base_stats: Dictionary = {
 	"Charisma": 0
 }
 
-enum Stats {
-	Constitution,
-	Strength,
-	Dexterity,
-	Intelligence,
-	Wisdom,
-	Charisma,
-	Health,
-	Mana,
-	Mana_Regen,
-	Stamina,
-	Defense,
-	Damage,
-	Weight_Capacity,
-	Base_Speed,
-	Weight_Ignore,
-	Speed,
-	Poison_Resist,
-	Magic_Resist,
-	Fire_Resist,
-	Cold_Resist,
-	Lightning_Resist,
-	Current_Weight
-}
+# enum Stats {
+# 	Constitution,
+# 	Strength,
+# 	Dexterity,
+# 	Intelligence,
+# 	Wisdom,
+# 	Charisma,
+# 	Health,
+# 	Mana,
+# 	Mana_Regen,
+# 	Stamina,
+# 	Defense,
+# 	Damage,
+# 	Weight_Capacity,
+# 	Base_Speed,
+# 	Weight_Ignore,
+# 	Speed,
+# 	Poison_Resist,
+# 	Magic_Resist,
+# 	Fire_Resist,
+# 	Cold_Resist,
+# 	Lightning_Resist,
+# 	Current_Weight,
+# 	Replacement_Damage
+# }
+
+const Stats = Structures.Stats
 
 const PROVIDER = {
 	Stats.Strength: [Stats.Damage, Stats.Weight_Capacity, Stats.Weight_Ignore, Stats.Speed],
@@ -73,7 +76,8 @@ const PROVIDER = {
 	Stats.Wisdom: [Stats.Magic_Resist],
 	Stats.Weight_Capacity: [Stats.Speed],
 	Stats.Base_Speed: [Stats.Speed],
-	Stats.Weight_Ignore: [Stats.Speed, Stats.Weight_Capacity]
+	Stats.Weight_Ignore: [Stats.Speed, Stats.Weight_Capacity],
+	Stats.Current_Weight: [Stats.Speed]
 }
 const DEPENDENCIES = {
 	Stats.Health: [Stats.Constitution],
@@ -112,7 +116,9 @@ var mana_regen: float = 0.0
 var stamina: int = 40
 var current_stamina: int = 40
 var defense: int = 0
-var damage: int = 0
+# var damage: int = 0
+var min_damage: int = 0
+var max_damage: int = 0
 var weight_capacity: int = 0
 var soft_capacity: float = 0.0
 var hard_capacity: float = 0.0
@@ -138,6 +144,7 @@ func _ready() -> void:
 	hit_box_node = get_node_or_null("Area2D")
 	hit_box = hit_box_node.get_node_or_null("Hit Box") as CollisionShape2D
 	attack_area = get_node_or_null("AttackBoxes") as Area2D
+	ui.player_character = self
 	# attack_area = %AttackBoxes as Area2D
 	print("Attack Area: ", attack_area)
 	attack_area.character_owner = "Player"
@@ -248,6 +255,7 @@ func _process(delta: float):
 				current_state = state.IDLE
 		if Input.is_key_pressed(KEY_SPACE):
 			current_state = state.ATTACK
+			check_if_dirty(Stats.Damage)
 			animation_player.play("Attack")
 		
 	# Camera zoom control
@@ -265,30 +273,65 @@ func _process(delta: float):
 func set_item_modifiers():
 	pass
 
+# item.modifiers = {enumStatName: [constant, multiplier], ...}
+
 func apply_item_buff(item):
-	pass
+	for stat in item.modifiers.keys():
+		if stat == Stats.Replacement_Damage:
+			# modified_stats[Stats.Replacement_Damage] = item.modifiers[Stats.Replacement_Damage]
+			modified_stats[Stats.Replacement_Damage] = [item.modifiers[Stats.Replacement_Damage][0], item.modifiers[Stats.Replacement_Damage][1], item.modifiers[Stats.Replacement_Damage][2], item.modifiers[Stats.Replacement_Damage][3]]
+			# dirtify_stat(Stats.Replacement_Damage)
+			dirtify_stat(Stats.Damage) # ensure damage recalculates after replacement change
+			continue
+		if stat == Stats.Current_Weight: continue
+		var stat_name = stat
+		var const_mod = item.modifiers[stat][0]
+		var mult_mod = 1 + item.modifiers[stat][1]
+		modify_stat(stat_name, const_mod, mult_mod)
 
 func remove_item_buff(item):
-	pass
+	for stat in item.modifiers.keys():
+		if stat == Stats.Replacement_Damage:
+			modified_stats.erase(Stats.Replacement_Damage)
+			dirtify_stat(Stats.Damage) # ensure damage recalculates after removal
+			continue
+		if stat == Stats.Current_Weight: continue
+		var stat_name = stat
+		var const_mod = -item.modifiers[stat][0]
+		var mult_mod = 1 / (1 + item.modifiers[stat][1])
+		modify_stat(stat_name, const_mod, mult_mod)
+
+func add_weight(weight: float):
+	modify_stat(Stats.Current_Weight, weight, 1.0)
+	dirtify_stat(Stats.Speed)
+	# dirtify_stat(Stats.Current_Weight)
+func remove_weight(weight: float):
+	modify_stat(Stats.Current_Weight, -weight, 1.0)
+	dirtify_stat(Stats.Speed)
 
 # Marks a stat as dirty so it will be recalculated
 func dirtify_stat(stat_name: Stats):
 	if stat_name not in dirtied_stats:
 		dirtied_stats.append(stat_name)
+	if stat_name in PROVIDER:
+		for stat in PROVIDER[stat_name]:
+			if stat not in dirtied_stats:
+				dirtied_stats.append(stat)
 		# print("Stat ", stat_name, " marked dirty. Type: ", typeof(stat_name))
 
-func modify_stat(stat_name: Stats, constant: int, multiplier: float):
+func modify_stat(stat_name: Stats, constant, multiplier: float):
 	if modified_stats.has(stat_name):
 		var current_data = modified_stats[stat_name]
 		constant += current_data[0]
 		multiplier *= current_data[1]
-	else:
-		modified_stats[stat_name] = [constant, multiplier]
+	modified_stats[stat_name] = [constant, multiplier]
 	if modified_stats[stat_name][0] == 0 and modified_stats[stat_name][1] == 1.0:
 		modified_stats.erase(stat_name)
 	dirtify_stat(stat_name)
-	for dependent_stat in PROVIDER[stat_name]:
-		dirtify_stat(dependent_stat)
+	# Not every stat provides derived stats (e.g., Current_Weight or Replacement_Damage)
+	if PROVIDER.has(stat_name):
+		for dependent_stat in PROVIDER[stat_name]:
+			dirtify_stat(dependent_stat)
 
 func check_if_dirty(stat_name: Stats):
 	if stat_name not in dirtied_stats:
@@ -449,27 +492,43 @@ func recalc_defense():
 	dirtied_stats.erase(Stats.Defense)
 
 func recalc_damage():
-	# Depends on weapon type, will be fixed later
-	for stat in DEPENDENCIES[Stats.Damage]:
-		check_if_dirty(stat)
-	damage = strength * 0.5 + strength * 0.1 * level
+	if Stats.Replacement_Damage in modified_stats.keys():
+		check_if_dirty(modified_stats[Stats.Replacement_Damage][3]) # Right now only strength or Dex
+		var lower = modified_stats[Stats.Replacement_Damage][0]
+		var upper = modified_stats[Stats.Replacement_Damage][1]
+		var constant = modified_stats[Stats.Replacement_Damage][2]
+		var stat_enum = modified_stats[Stats.Replacement_Damage][3]
+		var stat_value = strength if stat_enum == Stats.Strength else dexterity
+		min_damage = lower * stat_value + constant
+		max_damage = upper * stat_value + constant
+		print("Using replacement damage: ", min_damage, " to ", max_damage)
+	else:
+		for stat in DEPENDENCIES[Stats.Damage]:
+			check_if_dirty(stat)
+		var damage = strength * 0.5 + strength * 0.1 * level
+		min_damage = damage
+		max_damage = damage
 	if Stats.Damage in modified_stats.keys():
 		var mod_data = modified_stats[Stats.Damage]
-		damage = int(damage * mod_data[1] + mod_data[0])
-	damage = round(damage)
+		min_damage = min_damage * mod_data[1] + mod_data[0]
+		max_damage = max_damage * mod_data[1] + mod_data[0]
+	min_damage = round(min_damage)
+	max_damage = round(max_damage)
+		# damage = round(damage)
 	# if attack_area:
-	attack_area.damage = damage
+	attack_area.min_damage = min_damage
+	attack_area.max_damage = max_damage
 	dirtied_stats.erase(Stats.Damage)
 
 func recalc_weight_capacity():
 	for stat in DEPENDENCIES[Stats.Weight_Capacity]:
 		check_if_dirty(stat)
-	weight_capacity = strength * 15
+	weight_capacity = strength * 5
 	if Stats.Weight_Capacity in modified_stats.keys():
 		var mod_data = modified_stats[Stats.Weight_Capacity]
 		weight_capacity = int(weight_capacity * mod_data[1] + mod_data[0])
-	soft_capacity = weight_capacity * 0.5 - weight_ignore
-	hard_capacity = weight_capacity - weight_ignore
+	soft_capacity = weight_capacity * 0.5
+	hard_capacity = weight_capacity
 	weight_capacity = round(weight_capacity)
 	soft_capacity = round(soft_capacity * 100) / 100.0
 	hard_capacity = round(hard_capacity * 100) / 100.0
@@ -507,12 +566,22 @@ func recalc_speed():
 		current_weight = modified_stats[Stats.Current_Weight][0]
 	if current_weight > weight_ignore:
 		effective_weight = current_weight - weight_ignore
+	else:
+		effective_weight = 0.0
 	if soft_capacity <= 0:
 		assert(false, "Soft capacity is less than or equal to zero in speed calculation")
 	if effective_weight <= soft_capacity:
 		speed = base_speed * (0.75 + 0.25 * (1 - (effective_weight / soft_capacity)))
 	else:
-		speed = base_speed * (0.75 * (effective_weight - soft_capacity) / hard_capacity)
+		# Between soft and hard cap: linearly reduce from 75% to 0%
+		var remaining_capacity = hard_capacity - soft_capacity
+		if remaining_capacity > 0:
+			# speed = base_speed * (0.75 * (hard_capacity - effective_weight) / remaining_capacity)
+			speed = base_speed * (0.75 * (1 - ((effective_weight - soft_capacity) / remaining_capacity)))
+		else:
+			speed = 0
+	if speed < 0:
+		speed = 0
 	if Stats.Speed in modified_stats.keys():
 		var mod_data = modified_stats[Stats.Speed]
 		speed = speed * mod_data[1] + mod_data[0]
@@ -570,6 +639,7 @@ func recalc_lightning_resist():
 	dirtied_stats.erase(Stats.Lightning_Resist)
 
 func take_damage(dmg: int) -> void:
+	check_if_dirty(Stats.Defense)
 	current_health -= max(dmg - defense, 0)
 	if current_health <= 0:
 		current_health = 0
@@ -582,3 +652,13 @@ func die() -> void:
 	attack_area.monitoring = false
 	hit_box.disabled = true
 	# Additional death handling code here
+
+func get_current_weight() -> float:
+	var current_weight = 0.0
+	# check_if_dirty(Stats.Current_Weight)
+	check_if_dirty(Stats.Speed)
+	# check_if_dirty(Stats.Weight_Capacity)
+	if Stats.Current_Weight in modified_stats.keys():
+		current_weight = modified_stats[Stats.Current_Weight][0]
+	# check_if_dirty(Stats.Current_Weight)
+	return current_weight

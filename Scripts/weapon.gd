@@ -5,7 +5,8 @@ class_name Weapon
 # const PlayerCharacter = preload("res://Scripts/player.gd")
 # const EnemyCharacter = preload("res://Scripts/enemies.gd")
 var character_owner: String = ""
-var damage = 0
+var min_damage = 0
+var max_damage = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -24,7 +25,7 @@ func deal_damage(area: Area2D) -> void:
 	var body = area.get_parent()
 	if body == null:
 		return
-	
+	var damage = randi() % (max_damage - min_damage + 1) + min_damage
 	if character_owner == "Player" and body is EnemyCharacter:
 		if body.has_method("take_damage"):
 			body.take_damage(damage)

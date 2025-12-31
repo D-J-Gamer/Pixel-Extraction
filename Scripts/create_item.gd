@@ -340,5 +340,5 @@ func create_item(lower_worth, upper_worth, item_type: Structures.Type = Structur
 				Rarity.RARE: new_item.imagePath = "res://Images/Items/Amulets/Rare/Amulet.png"
 				Rarity.EPIC: new_item.imagePath = "res://Images/Items/Amulets/Epic/Amulet.png"
 				Rarity.LEGENDARY: new_item.imagePath = "res://Images/Items/Amulets/Legendary/Amulet.png"
-	new_item.modifiers[Stats.Current_Weight] = new_item.weight
+	new_item.modifiers[Stats.Current_Weight] = [new_item.weight, 0.0]
 	return new_item
