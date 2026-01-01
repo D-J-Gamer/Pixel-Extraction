@@ -1,7 +1,7 @@
 # Pixel-Extraction: 2nd Game Review & Analysis
 
 **Review Date:** January 1, 2026  
-**Reviewer:** GitHub Copilot AI  
+**Reviewer:** GitHub Copilot  
 **Project:** Pixel Extraction - Dungeon Crawler Extraction Game  
 **Engine:** Godot 4.5 (Mobile renderer)  
 **Current State:** Early to Mid Development
@@ -1092,7 +1092,7 @@ Your project has:
 
 ---
 
-**Reviewed by:** GitHub Copilot AI  
+**Reviewed by:** GitHub Copilot  
 **Review Date:** January 1, 2026  
 **Next Review Recommended:** After core loop completion (estimated: January 14, 2026)
 
