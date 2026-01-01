@@ -37,7 +37,7 @@ var base_stats: Dictionary = {
 	"Dexterity": 0,
 	"Intelligence": 0,
 	"Wisdom": 0,
-	"Charisma": 0
+	# "Charisma": 0
 }
 
 # enum Stats {
@@ -106,7 +106,7 @@ var strength = 0
 var dexterity = 0
 var intelligence = 0
 var wisdom = 0
-var charisma = 0
+# var charisma = 0
 
 var health: int = 0
 var current_health: int = 0
@@ -351,8 +351,8 @@ func check_if_dirty(stat_name: Stats):
 			recalc_intelligence()
 		Stats.Wisdom:
 			recalc_wisdom()
-		Stats.Charisma:
-			recalc_charisma()
+		# Stats.Charisma:
+		# 	recalc_charisma()
 		# Add additional stat recalculations as needed
 		Stats.Health:
 			recalc_health()
@@ -420,12 +420,12 @@ func recalc_wisdom():
 		wisdom = int(wisdom * mod_data[1] + mod_data[0])
 	dirtied_stats.erase(Stats.Wisdom)
 
-func recalc_charisma():
-	charisma = base_stats["Charisma"]
-	if Stats.Charisma in modified_stats.keys():
-		var mod_data = modified_stats[Stats.Charisma]
-		charisma = int(charisma * mod_data[1] + mod_data[0])
-	dirtied_stats.erase(Stats.Charisma)
+# func recalc_charisma():
+# 	charisma = base_stats["Charisma"]
+# 	if Stats.Charisma in modified_stats.keys():
+# 		var mod_data = modified_stats[Stats.Charisma]
+# 		charisma = int(charisma * mod_data[1] + mod_data[0])
+# 	dirtied_stats.erase(Stats.Charisma)
 
 func recalc_health():
 	for stat in DEPENDENCIES[Stats.Health]:

@@ -11,7 +11,7 @@ class Player:
 		"Dexterity": 0,
 		"Intelligence": 0,
 		"Wisdom": 0,
-		"Charisma": 0
+		# "Charisma": 0
 		#Health = Constitution * 10 + Constitution * 5 * level
 		#Mana = Intelligence * 10 + Intelligence * 5 * level
 		#Mana_Regen = Intelligence * 0.1 + Intelligence * 0.05 * level
@@ -44,30 +44,27 @@ const default_beginner_warrior_stats = {
 	"Strength": 14,
 	"Dexterity": 10,
 	"Intelligence": 8,
-	"Wisdom": 6,
-	"Charisma": 6
+	"Wisdom": 8,
 }
 
 const default_beginner_mage_stats = {
 	"Level": 1,
 	"Exp": 0,
 	"Constitution": 8,
-	"Strength": 6,
+	"Strength": 8,
 	"Dexterity": 10,
 	"Intelligence": 16,
 	"Wisdom": 12,
-	"Charisma": 6
 }
 
 const default_beginner_rogue_stats = {
 	"Level": 1,
 	"Exp": 0,
-	"Constitution": 10,
-	"Strength": 10,
-	"Dexterity": 16,
+	"Constitution": 11,
+	"Strength": 11,
+	"Dexterity": 18,
 	"Intelligence": 8,
 	"Wisdom": 8,
-	"Charisma": 6
 }
 
 const default_beginner_cleric_stats = {
@@ -75,10 +72,9 @@ const default_beginner_cleric_stats = {
 	"Exp": 0,
 	"Constitution": 12,
 	"Strength": 8,
-	"Dexterity": 6,
+	"Dexterity": 8,
 	"Intelligence": 10,
 	"Wisdom": 16,
-	"Charisma": 6
 }
 
 enum BEGINNER_CLASS {
@@ -88,12 +84,12 @@ enum BEGINNER_CLASS {
 	CLERIC
 }
 
-const BEGINNER_CLASSES = {
-	"Warrior": default_beginner_warrior_stats,
-	"Mage": default_beginner_mage_stats,
-	"Rogue": default_beginner_rogue_stats,
-	"Cleric": default_beginner_cleric_stats
-}
+const BEGINNER_CLASSES = [
+	default_beginner_warrior_stats,
+	default_beginner_mage_stats,
+	default_beginner_rogue_stats,
+	default_beginner_cleric_stats
+]
 
 #This structure will probably not be used, but is here for future reference
 class Enemy:

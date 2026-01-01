@@ -16,12 +16,25 @@ extends Control
 # 7. Way to interact with enemies' inventory 
 # done
 # 8. Actual player creation ui and way to customize character
+#done
+#new todo list
+# 1. Save and load system for encampment and game (including player stats, inventory, equipped items, etc)
+# 2. Modify item creation system to fix stat distribution:
+	# Each stat modifier gets random num between 0 and 1, sum them up, then divide each stat's num by total sum to get percentage
+	# Then multiply by power rating to get stat increase
+	# This instead of budget 1 item, then the next, then the next, which can lead to uneven stat distribution
+# 3. Add a way to extract, and enter with the same character
+# 4. Gain experience and level up system
+# 4. Basic combat mechanics for enemies to fight back
+# Ideas for later:
+	# Change a lot of map information from map_details to be turned into a scene that is instanced into game.gd
+	# Multiplayer support
 
 const MAIN_MENU := preload("res://Scripts/main_menu.gd")
 const CREATE_HUB_NAME := preload("res://Scripts/encampment_selection.gd")
-const HUB := preload("res://Scripts/encampment/encampment.gd")
+# const HUB := preload("res://Scripts/encampment/encampment.gd")
 const GAME := preload("res://Scripts/game.gd")
-
+const HUB := preload("res://Scenes/encampment.tscn")
 
 var menu_script: Node = null
 var create_hub_name: Node = null
@@ -58,7 +71,7 @@ func encampment_selection_to_encampment(encampment_name: String) -> bool:
 		file.store_string(json_string)
 		file.close()
 	
-	encampment = HUB.create_instance()
+	encampment = HUB.instantiate()
 	add_child(encampment)
 	encampment.main = self
 

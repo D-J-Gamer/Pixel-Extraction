@@ -1,5 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://d345gele06jhr"]
+[gd_scene load_steps=21 format=3 uid="uid://d345gele06jhr"]
 
+[ext_resource type="Script" uid="uid://c0lrvtqdemn7o" path="res://Scripts/encampment/encampment.gd" id="1_dwyl0"]
 [ext_resource type="Texture2D" uid="uid://e7p0pqwldcch" path="res://Images/Hub/Difficulty_and_Map_Select.png" id="1_g45p0"]
 [ext_resource type="Texture2D" uid="uid://ny01kqvng5ci" path="res://Images/Hub/AICampSite.png" id="2_w8vpr"]
 [ext_resource type="Texture2D" uid="uid://bop4ommt6tyn4" path="res://Images/Hub/Easy.png" id="3_bkd7o"]
@@ -10,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cwyhp7skdtc7x" path="res://Scripts/encampment/difficulty_selection.gd" id="8_hl2k4"]
 [ext_resource type="Texture2D" uid="uid://chx58c8jpd8it" path="res://Images/Hub/DungeonMapIconTemp.PNG" id="9_l8snl"]
 [ext_resource type="Script" uid="uid://dur4dmmxrn5xp" path="res://Scripts/encampment/select_map.gd" id="10_84oi3"]
+[ext_resource type="PackedScene" uid="uid://drkgknut3qchh" path="res://Scenes/CharacterCreation.tscn" id="12_0lh16"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_84oi3"]
 
@@ -27,9 +29,17 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tuhwt"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dwyl0")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
 offset_right = 3840.0
 offset_bottom = 2160.0
 color = Color(0, 0, 0, 1)
@@ -40,6 +50,7 @@ scale = Vector2(3.123472, 2.864303)
 texture = ExtResource("2_w8vpr")
 
 [node name="CreateCharacter" type="Button" parent="."]
+layout_mode = 0
 offset_left = 133.0
 offset_top = 107.0
 offset_right = 462.0
@@ -108,3 +119,16 @@ popup/item_4/text = "Legendary"
 popup/item_4/icon = ExtResource("7_dwyl0")
 popup/item_4/id = 4
 script = ExtResource("8_hl2k4")
+
+[node name="CharacterCreation" parent="." instance=ExtResource("12_0lh16")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -605.0
+offset_top = -900.0
+offset_right = 605.0
+offset_bottom = 900.0

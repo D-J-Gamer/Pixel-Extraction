@@ -1,6 +1,7 @@
-extends Node2D
+extends Control
 
-const HUB_SCENE := preload("res://Scenes/encampment.tscn")
+# const HUB_SCENE := preload("res://Scenes/encampment.tscn")
+@onready var character_creation = $CharacterCreation
 const Player = Structures.Player
 
 var main: Control = null
@@ -9,10 +10,10 @@ var difficulty_and_map_select: Node = null
 var players = []
 var current_player_ind = null
 
-static func create_instance() -> Node2D:
-	var instance = HUB_SCENE.instantiate()
-	instance.set_script(load("res://Scripts/encampment/encampment.gd"))
-	return instance
+# static func create_instance() -> Node2D:
+	# var instance = HUB_SCENE.instantiate()
+	# instance.set_script(load("res://Scripts/encampment/encampment.gd"))
+	# return instance
 
 func _ready():
 	difficulty_and_map_select = get_node_or_null("DifficultyAndMapSelect")
@@ -22,6 +23,7 @@ func _ready():
 	var create_player_button1 = get_node_or_null("CreateCharacter")
 	if create_player_button1 and create_player_button1.has_signal("pressed"):
 		create_player_button1.connect("pressed", Callable(self, "create_player_button"))
+	character_creation.encampment = self
 
 func _on_start_pressed():
 	if main == null:
@@ -38,14 +40,17 @@ func get_map_path() -> String:
 	return menuButton.map_path
 
 func create_player_button():	
-	var player = Player.new()
-	player.name = "NewHero"
-	player.stats = Structures.default_beginner_warrior_stats
+	# var player = Player.new()
+	# player.name = "NewHero"
+	# player.stats = Structures.default_beginner_warrior_stats
 	# Add player creation UI
-
+	if character_creation.visible == true:
+		return
+	character_creation.visible = true
+	character_creation._ready()
 	# temp code
-	player.scenePath = "res://Scenes/Characters/Players/skeleton.tscn"
-	create_player(player)
+	# player.scenePath = "res://Scenes/Characters/Players/skeleton.tscn"
+	# create_player(player)
 
 func create_player(player):
 	print("Player created: ", player)

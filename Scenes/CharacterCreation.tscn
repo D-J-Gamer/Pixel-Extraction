@@ -1,0 +1,473 @@
+[gd_scene load_steps=19 format=3 uid="uid://drkgknut3qchh"]
+
+[ext_resource type="Texture2D" uid="uid://c8irgjtbgrciq" path="res://Images/UI/X.png" id="1_jayhr"]
+[ext_resource type="Script" uid="uid://cu2fn2kk68r4f" path="res://Scripts/UI/character_creation.gd" id="1_lrqo7"]
+[ext_resource type="Texture2D" uid="uid://dkj2tbwluahyq" path="res://Images/UI/-.png" id="2_6fyqm"]
+[ext_resource type="Texture2D" uid="uid://dhwelj2sx4vm1" path="res://Images/Characters/Main Character/skeleton2_v2_1.png" id="2_p1kd1"]
+[ext_resource type="Texture2D" uid="uid://cqd237jln03lw" path="res://Images/UI/Left.png" id="3_cjuwb"]
+[ext_resource type="Texture2D" uid="uid://dy7vcm0kh4l0g" path="res://Images/UI/+.png" id="3_lrqo7"]
+[ext_resource type="Script" uid="uid://btx4p6tpgas0g" path="res://Scripts/UI/charactercreation_stats_label.gd" id="3_ypqxi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_6fyqm"]
+font_size = 50
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5wgyk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5wgyk"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_ypqxi"]
+font_size = 32
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6fyqm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ypqxi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jayhr"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lrqo7"]
+atlas = ExtResource("2_p1kd1")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ypqxi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lrqo7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cjuwb"]
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cjuwb"]
+
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(1210, 1800)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2630.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+script = ExtResource("1_lrqo7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.50140655, 0.5014065, 0.5014065, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+text = "Character Creation"
+label_settings = SubResource("LabelSettings_6fyqm")
+
+[node name="PanelContainer" type="Panel" parent="ColorRect/VBoxContainer/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="ColorRect/VBoxContainer/Header/PanelContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.000001
+offset_right = 27.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("1_jayhr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="Left" type="Control" parent="ColorRect/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Left"]
+custom_minimum_size = Vector2(60, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5wgyk")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Left/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_cjuwb")
+
+[node name="Stat_Labels" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+script = ExtResource("3_ypqxi")
+
+[node name="Points Remaining" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels"]
+layout_mode = 2
+text = "Points Remaining: #"
+label_settings = SubResource("LabelSettings_5wgyk")
+
+[node name="Strength" type="HBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Strength #"
+label_settings = SubResource("LabelSettings_ypqxi")
+
+[node name="Minus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6fyqm")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength/Minus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_6fyqm")
+expand_mode = 3
+
+[node name="Plus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ypqxi")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength/Plus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_lrqo7")
+expand_mode = 3
+
+[node name="Dexterity" type="HBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Dexterity #"
+label_settings = SubResource("LabelSettings_ypqxi")
+
+[node name="Minus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6fyqm")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity/Minus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_6fyqm")
+expand_mode = 3
+
+[node name="Plus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ypqxi")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity/Plus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_lrqo7")
+expand_mode = 3
+
+[node name="Constitution" type="HBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Constitution #"
+label_settings = SubResource("LabelSettings_ypqxi")
+
+[node name="Minus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6fyqm")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution/Minus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_6fyqm")
+expand_mode = 3
+
+[node name="Plus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ypqxi")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution/Plus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_lrqo7")
+expand_mode = 3
+
+[node name="Inteligence" type="HBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Inteligence #"
+label_settings = SubResource("LabelSettings_ypqxi")
+
+[node name="Minus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6fyqm")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence/Minus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_6fyqm")
+expand_mode = 3
+
+[node name="Plus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ypqxi")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence/Plus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_lrqo7")
+expand_mode = 3
+
+[node name="Wisdom" type="HBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Wisdom #"
+label_settings = SubResource("LabelSettings_ypqxi")
+
+[node name="Minus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6fyqm")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom/Minus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_6fyqm")
+expand_mode = 3
+
+[node name="Plus" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ypqxi")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom/Plus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_lrqo7")
+expand_mode = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Class" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Warrior"
+label_settings = SubResource("LabelSettings_jayhr")
+
+[node name="Control" type="Control" parent="ColorRect/VBoxContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(312, 312)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ColorRect/VBoxContainer/HBoxContainer/VBoxContainer2/Control"]
+position = Vector2(156, 156)
+scale = Vector2(16, 16)
+sprite_frames = SubResource("SpriteFrames_ypqxi")
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Right" type="Control" parent="ColorRect/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer/Right"]
+custom_minimum_size = Vector2(60, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5wgyk")
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VBoxContainer/HBoxContainer/Right/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_cjuwb")
+flip_h = true
+
+[node name="Control" type="Control" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -43.5
+offset_right = 43.5
+offset_bottom = 45.0
+grow_horizontal = 2
+text = "Skills:"
+label_settings = SubResource("LabelSettings_cjuwb")
+
+[node name="Footer" type="Control" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Character Create" type="Button" parent="ColorRect/VBoxContainer/Footer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cjuwb")
+text = "Create Charcter"
+
+[connection signal="button_up" from="ColorRect/VBoxContainer/Header/PanelContainer/Button" to="." method="_on_x_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Left/Button" to="." method="_on_left_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength/Minus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_minus_str_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Strength/Plus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_plus_str_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity/Minus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_minus_dex_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Dexterity/Plus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_on_plus_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution/Minus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_minus_con_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Constitution/Plus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_plus_con_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence/Minus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_minus_int_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Inteligence/Plus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_plus_int_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom/Minus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_minus_wis_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels/Wisdom/Plus" to="ColorRect/VBoxContainer/HBoxContainer/Stat_Labels" method="_plus_wis_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/HBoxContainer/Right/Button" to="." method="_on_right_button_up"]
+[connection signal="button_up" from="ColorRect/VBoxContainer/Footer/Character Create" to="." method="_character_create_button_up"]

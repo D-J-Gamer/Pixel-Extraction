@@ -10,9 +10,9 @@ font_size = 32
 
 [node name="UI" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 3840.0
-offset_bottom = 2160.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_636u5")
@@ -20,12 +20,13 @@ script = ExtResource("1_636u5")
 [node name="Inventory" type="ColorRect" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.66700006
 anchor_right = 1.0
-offset_left = -1280.0
-offset_bottom = 1880.0
-grow_horizontal = 0
+anchor_bottom = 0.86800003
+offset_left = 0.71972656
+offset_bottom = -0.88012695
+size_flags_horizontal = 3
 color = Color(0.174626, 0.17462596, 0.17462596, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="Inventory"]
@@ -229,8 +230,12 @@ text = "Gold: "
 [node name="Enemy Inventory" type="ColorRect" parent="."]
 visible = false
 layout_mode = 1
-offset_right = 1280.0
-offset_bottom = 1880.0
+anchors_preset = -1
+anchor_right = 0.333
+anchor_bottom = 0.86800003
+offset_right = -1.7199707
+offset_bottom = -0.88012695
+size_flags_horizontal = 3
 color = Color(0.174626, 0.17462596, 0.17462596, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="Enemy Inventory"]
@@ -402,12 +407,14 @@ columns = 10
 
 [node name="Inventory3" type="ColorRect" parent="."]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
+anchors_preset = -1
+anchor_top = 0.86800003
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -280.0
-offset_right = 3840.0
-grow_vertical = 0
+offset_top = -0.88012695
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
 color = Color(0.174626, 0.17462596, 0.17462596, 1)
 
 [connection signal="button_up" from="Inventory/MarginContainer/VBoxContainer/Header/Button" to="." method="_on_button_button_up"]
