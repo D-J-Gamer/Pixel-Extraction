@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 		#global_position = get_global_mouse_position()
 		global_position = lerp(global_position, get_global_mouse_position(), 25 * delta)
 	if description_follow:
-		var target_pos = get_global_mouse_position() - txt.size / 2
+		var target_pos = get_global_mouse_position() - txt.size / 4
 		
 		# Clamp position to keep text within camera view
 		var camera = get_viewport().get_camera_2d()

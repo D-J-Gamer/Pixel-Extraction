@@ -1,7 +1,7 @@
 extends MenuButton
 
 const MAP_PATHS: Array = [
-    "res://Maps/Dungeon.png"
+    "res://Scenes/Maps/Dungeon.tscn"
     #"res://Maps/Dungeon2.png"
 ]
 var map_path: String = MAP_PATHS[0]

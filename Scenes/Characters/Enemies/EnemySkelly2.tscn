@@ -717,10 +717,11 @@ height = 16.0
 size = Vector2(90, 90)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x51gi"]
-size = Vector2(15.25, 5)
+size = Vector2(11.25, 6)
 
 [node name="Player" type="CharacterBody2D"]
-scale = Vector2(4, 4)
+y_sort_enabled = true
+scale = Vector2(2, 2)
 motion_mode = 1
 script = ExtResource("1_c40ue")
 
@@ -732,11 +733,12 @@ libraries = {
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_jrho0")
 animation = &"Attack"
+offset = Vector2(0, -11)
 
 [node name="Area2D" type="Area2D" parent="."]
 z_index = 2
 z_as_relative = false
-position = Vector2(-2.75, 5.5)
+position = Vector2(-2.75, -5.5)
 
 [node name="Hit Box" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0.75, -0.25)
@@ -749,14 +751,21 @@ scale = Vector2(0.25, 0.25)
 shape = SubResource("RectangleShape2D_1h2df")
 
 [node name="Walking Collision" type="CollisionShape2D" parent="."]
-position = Vector2(-0.875, 11)
+position = Vector2(-0.875, -0.5)
 shape = SubResource("RectangleShape2D_x51gi")
 
 [node name="AttackBoxes" type="Area2D" parent="."]
 script = ExtResource("7_1h2df")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBoxes"]
-position = Vector2(1.5625, 4.9375)
+position = Vector2(1.563, -6.062)
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_postprocessing = 1
+debug_enabled = true
+
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="area_entered" from="Area2D/GrabInventory" to="." method="_on_inventory_area_entered"]
 [connection signal="area_exited" from="Area2D/GrabInventory" to="." method="_on_inventory_area_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

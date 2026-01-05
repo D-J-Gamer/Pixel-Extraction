@@ -25,10 +25,12 @@ extends Control
 	# This instead of budget 1 item, then the next, then the next, which can lead to uneven stat distribution
 # 3. Add a way to extract, and enter with the same character
 # 4. Gain experience and level up system
-# 4. Basic combat mechanics for enemies to fight back
+# 5. Basic combat mechanics for enemies to fight back
+# enimes can now move towards player via pathfinding
 # Ideas for later:
 	# Change a lot of map information from map_details to be turned into a scene that is instanced into game.gd
 	# Multiplayer support
+	# unlock new maps through drops.
 
 const MAIN_MENU := preload("res://Scripts/main_menu.gd")
 const CREATE_HUB_NAME := preload("res://Scripts/encampment_selection.gd")

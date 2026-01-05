@@ -115,15 +115,15 @@ func _on_slot_mouse_exited(a_Slot):
 	#a_Slot.set_color(a_Slot.States.DEFAULT)
 	clear_grid()
 	
-func spawn_item() -> void:
-	var new_item = item_scene.instantiate()
-	add_child(new_item)
-	new_item.load_item(0)
-	new_item.selected = true
-	item_held = new_item
+#func spawn_item() -> void:
+	#var new_item = item_scene.instantiate()
+	#add_child(new_item)
+	#new_item.load_item(0)
+	#new_item.selected = true
+	#item_held = new_item
 
 func _on_button_button_up() -> void:
-	spawn_item()
+	#spawn_item()
 	pass
 
 func check_slot_availability(a_slot) -> void:
@@ -191,14 +191,16 @@ func place_item(modify_weight: bool = true) -> void:
 		var calculated_grid_id = current_slot.slot_ID + icon_anchor.x + icon_anchor.y * cols3
 		
 		var target_slot = grid_arrays[owner_index][calculated_grid_id]
-		var slot_center = target_slot.global_position + target_slot.size / 4.0
-		
+		# var slot_center = target_slot.global_position + target_slot.size / 2.0		
 		item_held.get_parent().remove_child(item_held)
 		grid_containers[owner_index].add_child(item_held)
 		# item_held.global_position = get_global_mouse_position()
 		# item_held._snap_to(grid_array[calculated_grid_id].global_position)
 		# item_held._snap_to(slot_center)
-		item_held.global_position = slot_center
+		# item_held.global_position = slot_center
+		# Use local position instead of global to account for parent transforms
+		var slot_center_local = target_slot.get_rect().get_center()
+		item_held.position = slot_center_local
 		item_held.selected = false
 		
 		item_held.grid_anchor = current_slot

@@ -3,6 +3,7 @@ extends CharacterBody2D
 class_name PlayerCharacter
 
 @onready var ui = $Camera2D/Container/UI
+@onready var ui_container = $Camera2D/Container
 
 # var texturePath: String = ""
 # var sprite: Node2D = null
@@ -14,6 +15,9 @@ var hit_box_node : Area2D = null
 var attack_area: Area2D = null
 var delta_time: float = 0.0
 const SECONDS_COUNT: int = 60
+const speed_multiplier: float = 0.5
+const ui_pos = Vector2(-240, -135)
+var current_camera_zoom: Vector2 = Vector2(4.0, 4.0)
 
 enum state {
 	IDLE,
@@ -226,7 +230,7 @@ func _process(delta: float):
 		
 		# Use move_and_collide to handle collision detection
 		if movement_change != Vector2.ZERO:
-			movement_change = movement_change.normalized() * movement * delta * SECONDS_COUNT
+			movement_change = movement_change.normalized() * movement * delta * SECONDS_COUNT * speed_multiplier
 			var collision = move_and_collide(movement_change) as KinematicCollision2D
 			if collision:
 				if movement_change.x != 0:
@@ -261,15 +265,29 @@ func _process(delta: float):
 	# Camera zoom control
 	if Input.is_key_pressed(KEY_UP):
 		var camera = get_node_or_null("Camera2D") as Camera2D
+		var container_size = ui_container.size
 		var zoom_scalescale = camera.zoom.x * 0.02
-		if camera and camera.zoom.x < 5.5:
+		if camera and camera.zoom.x < 11.0:
 			camera.zoom += Vector2(zoom_scalescale, zoom_scalescale)
+			if camera.zoom.x > 11.0:
+				camera.zoom = Vector2(11.0, 11.0)
+		# Scale UI inversely to maintain consistent on-screen size
+		if ui_container and ui_container.size.x > 0 and ui_container.size.y > 0:
+			ui_container.scale = Vector2(4 / camera.zoom.x, 4 / camera.zoom.y)
+			ui_container.position = ui_pos + container_size * (1.0 - ui_container.scale.x) / 2.0
 	if Input.is_key_pressed(KEY_DOWN):
 		var camera = get_node_or_null("Camera2D") as Camera2D
+		var container_size = ui_container.size
 		var zoom_scale = camera.zoom.x * 0.02
-		if camera and camera.zoom.x > 2.0:
+		if camera and camera.zoom.x > 4.0:
 			camera.zoom -= Vector2(zoom_scale, zoom_scale)
-
+			if camera.zoom.x < 4.0:
+				camera.zoom = Vector2(4.0, 4.0)
+		# Scale UI inversely to maintain consistent on-screen size
+		if ui_container and ui_container.size.x > 0 and ui_container.size.y > 0:
+			ui_container.scale = Vector2(4 / camera.zoom.x, 4 / camera.zoom.y)
+			ui_container.position = ui_pos + container_size * (1.0 - ui_container.scale.x) / 2.0
+			# ui_container.scale = Vector2(4.0 / camera.zoom.x, 4.0 / camera.zoom.y)
 func set_item_modifiers():
 	pass
 

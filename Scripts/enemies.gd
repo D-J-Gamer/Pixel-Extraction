@@ -2,6 +2,12 @@ extends CharacterBody2D
 
 class_name EnemyCharacter
 
+@onready var timer = $Timer as Timer
+@onready var pathfinder = $NavigationAgent2D as NavigationAgent2D
+var pathfinding_target: Node
+
+const SECONDS_COUNT = 60.0
+
 var animation_player: AnimationPlayer = null
 var sprite_texture: AnimatedSprite2D = null
 var walking_colision: CollisionShape2D = null
@@ -44,6 +50,11 @@ func _ready() -> void:
 	# attack_area = %AttackBoxes as Area2D
 	attack_area.character_owner = "Enemy"
 	set_process_unhandled_input(true)
+	# Kick off navigation immediately if we already have a target
+	if pathfinding_target:
+		pathfinder.target_position = pathfinding_target.global_position
+	# Timer keeps refreshing the path, but start it only after initial target set
+	timer.start()
 
 func set_enemy(enemy_stats: Dictionary): 
 	#{"Exp": 2, "Health": 20, "Mana": 0, "Mana_Regen": 0.0, "Defence": 1, "Damage": 4, "Speed": 1.5, "Poison_Resist": 0.5, "Magic_Resist": 0.2, "Fire_Resist": 0.2, "Cold_Resist": 0.2, "Lightning_Resist": 0.2}
@@ -109,3 +120,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		for item in inventory:
 			player_character.ui.add_item(item)
 		inventory.clear()
+
+func _physics_process(delta: float) -> void:
+	if current_state == EnemyState.DEAD:
+		return
+	if pathfinding_target:
+		# Keep target updated; NavigationAgent2D will replan as needed
+		pathfinder.target_position = pathfinding_target.global_position
+		if !pathfinder.is_target_reached():
+			var next_point = pathfinder.get_next_path_position()
+			var nav_point_direction = (next_point - global_position).normalized()
+			var movement_change = nav_point_direction * speed * SECONDS_COUNT * 0.5
+			velocity = movement_change
+			move_and_slide()
+
+
+func _on_timer_timeout() -> void:
+	if current_state == EnemyState.DEAD:
+		return
+	if pathfinding_target and pathfinder.target_position != pathfinding_target.global_position:
+		pathfinder.target_position = pathfinding_target.global_position
+	timer.start()
