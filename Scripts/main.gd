@@ -10,9 +10,9 @@ extends Control
 # 4. Enemies which have stats
 # done
 # 5. Inventory system as well as a temporary create item in inventory (so I can move it around) 
-# I believe I'm done
+# I believe I'm done, the first interaction with enemy inventory puts all the items visually into one slot, after you exit and grab it and interact again, it's fixed. Don't know the cause.
 # 6. Fighting (ability to kill enemies) 
-# I can fight enemies, but they don't have a way to fight back yet.
+# done
 # 7. Way to interact with enemies' inventory 
 # done
 # 8. Actual player creation ui and way to customize character
@@ -26,7 +26,7 @@ extends Control
 # 3. Add a way to extract, and enter with the same character
 # 4. Gain experience and level up system
 # 5. Basic combat mechanics for enemies to fight back
-# enimes can now move towards player via pathfinding
+# done
 # Ideas for later:
 	# Change a lot of map information from map_details to be turned into a scene that is instanced into game.gd
 	# Multiplayer support

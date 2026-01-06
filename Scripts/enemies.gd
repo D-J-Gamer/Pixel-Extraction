@@ -124,7 +124,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if current_state == EnemyState.DEAD:
 		return
-	if pathfinding_target:
+	if current_state == EnemyState.IDLE:
+		var distance_to_player = global_position.distance_to(pathfinding_target.global_position)
+		if distance_to_player < 7 * 32: # 7 tiles away
+			current_state = EnemyState.WALKING
+			animation_player.play("Walk")
+		return
+	if current_state == EnemyState.WALKING and pathfinding_target:
 		# Keep target updated; NavigationAgent2D will replan as needed
 		pathfinder.target_position = pathfinding_target.global_position
 		if !pathfinder.is_target_reached():
@@ -133,6 +139,14 @@ func _physics_process(delta: float) -> void:
 			var movement_change = nav_point_direction * speed * SECONDS_COUNT * 0.5
 			velocity = movement_change
 			move_and_slide()
+		if pathfinder.distance_to_target() < 1 * 32: # 1 tile away
+			current_state = EnemyState.ATTACKING
+			animation_player.play("Attack")
+		return
+	if not animation_player.is_playing():
+		current_state = EnemyState.IDLE
+		animation_player.play("Idle")
+		return
 
 
 func _on_timer_timeout() -> void:

@@ -696,7 +696,6 @@ position = Vector2(2.125, -9.812)
 rotation = 1.5707964
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-path_postprocessing = 1
 debug_enabled = true
 
 [node name="Timer" type="Timer" parent="."]

@@ -201,10 +201,10 @@ func set_player(player: Structures.Player):
 
 
 func _process(delta: float):
-	check_if_dirty(Stats.Speed)
-	# print("Current Speed: ", speed)
 	if current_state == state.DEATH:
 		return
+	check_if_dirty(Stats.Speed)
+	# print("Current Speed: ", speed)
 	if current_state == state.ATTACK:
 		if not animation_player.is_playing():
 			current_state = state.IDLE
@@ -449,7 +449,7 @@ func recalc_health():
 	for stat in DEPENDENCIES[Stats.Health]:
 		check_if_dirty(stat)
 	var tmp_health = health
-	health = constitution * 10 + constitution * 5 * level
+	health = constitution * 7 + constitution * 3 * level
 	if Stats.Health in modified_stats.keys():
 		var mod_data = modified_stats[Stats.Health]
 		health = int(health * mod_data[1] + mod_data[0])
@@ -657,6 +657,8 @@ func recalc_lightning_resist():
 	dirtied_stats.erase(Stats.Lightning_Resist)
 
 func take_damage(dmg: int) -> void:
+	if current_state == state.DEATH:
+		return
 	check_if_dirty(Stats.Defense)
 	current_health -= max(dmg - defense, 0)
 	if current_health <= 0:
@@ -666,6 +668,7 @@ func take_damage(dmg: int) -> void:
 func die() -> void:
 	# Handle player death (e.g., respawn, game over screen, etc.)
 	animation_player.play("Death")
+	current_state = state.DEATH
 	walking_colision.disabled = true
 	attack_area.monitoring = false
 	hit_box.disabled = true
