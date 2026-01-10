@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c03mes87gnj38"]
+
+[ext_resource type="Script" uid="uid://b6s6685q5dwdi" path="res://player_character_21.gd" id="1_oi4th"]
+[ext_resource type="Texture2D" uid="uid://dhwelj2sx4vm1" path="res://Images/Characters/Main Character/skeleton2_v2_1.png" id="2_3ounq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i0kse"]
+radius = 4.5
+height = 15.0
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_oi4th")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-2.75, -4.5)
+texture = ExtResource("2_3ounq")
+
+[node name="Body" type="CollisionShape2D" parent="."]
+position = Vector2(-2.75, -4.5)
+shape = SubResource("CapsuleShape2D_i0kse")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(8, 8)

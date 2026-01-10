@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=4 uid="uid://cw38a4xpe5dho"]
+[gd_scene load_steps=16 format=4 uid="uid://cw38a4xpe5dho"]
 
 [ext_resource type="Script" uid="uid://coen5dypgm80" path="res://Scripts/maps/map.gd" id="1_o6m8x"]
 [ext_resource type="Texture2D" uid="uid://ljls5hkbihu1" path="res://Maps/Tilesets/Dungeon_Tileset_at.png" id="1_tmc33"]
 [ext_resource type="Texture2D" uid="uid://b8hb15ejjg7dg" path="res://Maps/Dungeon.png" id="2_o6m8x"]
+[ext_resource type="PackedScene" uid="uid://b66roowhgboyw" path="res://Scenes/Maps/Extraction.tscn" id="4_0qwq7"]
+[ext_resource type="PackedScene" uid="uid://c03mes87gnj38" path="res://player_character21.tscn" id="5_mwltr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l7eia"]
 texture = ExtResource("1_tmc33")
@@ -789,6 +791,10 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_ixyqv")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0qwq7"]
+texture = ExtResource("1_tmc33")
+texture_region_size = Vector2i(32, 32)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0eg1h"]
 texture = ExtResource("1_tmc33")
 texture_region_size = Vector2i(32, 32)
@@ -1052,6 +1058,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_16nw8"]
 tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_0eg1h")
+sources/0 = SubResource("TileSetAtlasSource_0qwq7")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lf1px"]
 texture = ExtResource("1_tmc33")
@@ -1608,6 +1615,102 @@ offset_right = 4096.0
 offset_bottom = 4096.0
 texture = ExtResource("2_o6m8x")
 
+[node name="Extraction Points" type="Node2D" parent="."]
+visible = false
+
+[node name="Extraction" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(963, 3837)
+
+[node name="Extraction2" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2043, 3664)
+
+[node name="Extraction3" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2451, 3676)
+
+[node name="Extraction4" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3166, 3524)
+
+[node name="Extraction5" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3737, 3701)
+
+[node name="Extraction6" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1152, 3163)
+
+[node name="Extraction7" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(212, 2989)
+
+[node name="Extraction8" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1122, 2367)
+
+[node name="Extraction9" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2245, 1775)
+
+[node name="Extraction10" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1197, 1792)
+
+[node name="Extraction11" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3663, 1444)
+
+[node name="Extraction12" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3332, 2300)
+
+[node name="Extraction13" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3816, 1027)
+
+[node name="Extraction14" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3040, 513)
+
+[node name="Extraction15" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3855, 277)
+
+[node name="Extraction16" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1770, 1208)
+
+[node name="Extraction17" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1391, 1093)
+
+[node name="Extraction18" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(649, 1677)
+
+[node name="Extraction19" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(229, 1921)
+
+[node name="Extraction20" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(268, 428)
+
+[node name="Extraction21" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(286, 931)
+
+[node name="Extraction22" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2477, 267)
+
+[node name="Extraction23" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1604, 1949)
+
+[node name="Extraction24" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1586, 2823)
+
+[node name="Extraction25" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2577, 2848)
+
+[node name="Extraction26" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(877, 298)
+
+[node name="Extraction27" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(1981, 573)
+
+[node name="Extraction28" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2161, 1124)
+
+[node name="Extraction29" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(980, 1391)
+
+[node name="Extraction30" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(2973, 1388)
+
+[node name="Extraction31" parent="Extraction Points" groups=["Extraction_Points"] instance=ExtResource("4_0qwq7")]
+position = Vector2(3701, 2733)
+
 [node name="Y_Sort" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -1619,7 +1722,11 @@ tile_set = SubResource("TileSet_1lj4t")
 [node name="Enemies" type="Node2D" parent="Y_Sort"]
 y_sort_enabled = true
 
+[node name="PlayerCharacter" parent="Y_Sort" instance=ExtResource("5_mwltr")]
+position = Vector2(194, 151)
+
 [node name="Enemy_SpawnPoints" type="Node2D" parent="."]
+visible = false
 
 [node name="Area1" type="Node2D" parent="Enemy_SpawnPoints" groups=["Enemy_Spawn_Areas"]]
 
@@ -2072,6 +2179,7 @@ offset_bottom = 3552.0
 color = Color(1, 0, 0, 1)
 
 [node name="Player_SpawnPoints" type="Node2D" parent="."]
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="Player_SpawnPoints"]
 offset_left = 128.0
@@ -2186,5 +2294,6 @@ offset_bottom = 3872.0
 color = Color(0, 1, 0, 1)
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
 position = Vector2(-9, -28)
 navigation_polygon = SubResource("NavigationPolygon_l7eia")
